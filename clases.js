@@ -1,3 +1,5 @@
+
+
 class Usuario{
     constructor(){
         this.nombre;
@@ -51,6 +53,66 @@ function testUsuario(){
     console.log(testUsuStr)
     const recuTestUsu = Usuario.fromJSON(JSON.parse(testUsuStr));
     console.log(recuTestUsu);
+    console.log(recuTestUsu.getNombre());
+    console.log(recuTestUsu.getApellido());
+    console.log(recuTestUsu.getNomUsu());
 }
 
-testUsuario();
+class SegUsuario{
+    constructor(nomUsu, pass){
+         this.nomUsu = nomUsu
+         this.pass = pass
+         this.token;
+         this.dateToken;
+    }
+
+    setDateToken(dat){
+        this.dateToken = dat;
+    }
+
+    getDateToken(){
+        return this.dateToken;
+    }
+
+    setToken(tk){
+        this.token = tk;
+    }
+
+    getToken(){
+        return this.token;
+    }
+    
+    setNomUsu(usu){
+        this.nomUsu = usu
+    }
+
+    getNomUsu(){
+        return this.nomUsu
+    }
+
+    setPass(pas){
+        this.pass = pas
+    }
+
+    getPass(){
+        return this.pass
+    }
+       
+}
+
+function testSegUsuario(){
+    const oSU = new SegUsuario("Enzo","1234");
+    oSU.setToken("39mv0nct89u98mwc8cctmw")
+    oSU.setDateToken(new Date());
+    console.log(oSU);
+}
+
+
+function test(){
+    testUsuario();
+    testSegUsuario();    
+}
+
+//test()
+
+module.exports = {Usuario, SegUsuario};

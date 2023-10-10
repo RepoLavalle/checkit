@@ -6,17 +6,16 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Sistema Tickets</h1>
-    <h2>Registro de Nuevo Usuario</h2>
-    <hr>
-    <form action="http://localhost:3000" method="POST">
-        <p><label>Nombre:&nbsp;</label><input type='text' name='nombre' ></p>
-        <p><label>Apellido:&nbsp;</label><input type='text' name='apellido' ></p>
-        <p><label>Apodo/Alias:&nbsp;</label><input type='text' name='nomUsu' ></p>
-        <hr>
-        <p><label>Contraseña:</label><input type='text' name='pass'></p>
-        <p><label>Repite Contraseña:</label><input type='text' name='repPass'></p>
-        <input type="submit" value="Enviar">
+    <h1>Sistema Checklist</h1>
+    <h2>Login</h2>
+    <hr>   
+    <form action="http://localhost:3000/login" method="POST">
+        <label for="user" >Usuario:&nbsp;</label>
+        <input type="text" name="user">
+        <label for="pass" name="pass">Contraseña:&nbsp;</label>
+        <input type="text" name="pass">
+        <input type="submit" name="cu00" value="Ingresar">
+        <input type="submit" name="cu00" value="Nuevo">
     </form>
 </body>
 </html>

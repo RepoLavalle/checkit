@@ -36,11 +36,31 @@ app.get('/', (req, res) => {
     res.render('login',{});
 });
 
-app.post('/',(req, res)=>{
-    console.log("--'post/'-->[server]");
+app.post('/login',(req, res)=>{
+    console.log("--'post/login'-->[server]");
     console.log(JSON.stringify(req.body));
-    Seguridad.regUsu(req.body)
-    res.render('exito',{});    
+    if(req.body.cu00 == "Nuevo"){
+        res.render('registro',{});  
+    }
+    if(req.body.cu00 == "Ingresar"){
+        
+        res.render('menu',{});
+    }
+
+});
+
+app.post('/registro', (req, res) => {
+    let rta = Seguridad.regUsu(req.body);
+    rta ? res.render('exito',{}) : res.render('falla',{});
+});
+
+
+app.post('/menu', (req, res) => {
+    const nombre = new Date(); // Puedes pasar datos dinámicos a la vista
+    // creo un objeto
+    //res.render('index', { nombre: nombre, comida: plato });
+    //res.send("<h1>Checkit free.... ! </p>");
+    res.render('menu',{});
 });
 
 // cu 01 
