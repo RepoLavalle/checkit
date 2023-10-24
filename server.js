@@ -37,20 +37,32 @@ app.get('/', (req, res) => {
 });
 
 app.post('/login',(req, res)=>{
-    console.log("--'post/login'-->[server]");
-    console.log(JSON.stringify(req.body));
+    console.log(" nav --> ser 'post/login'");
+    //console.log(JSON.stringify(req.body));
     if(req.body.cu00 == "Nuevo"){
+        console.log("<-- registro--[server]")
         res.render('registro',{});  
     }
     if(req.body.cu00 == "Ingresar"){
-        
-        res.render('menu',{});
+        let valUsu = Seguridad.validarUsuario(req.body)
+
+        if(valUsu.validar){
+            let contenido = JSON.stringify(valUsu.carga)
+            console.log("nav <-r- server 'menu.html'")
+            res.render('menu',{contenido, valUsu});            
+        }else{
+            console.log("nav <-r- server 'falla.html'")
+            res.render('falla',{}); 
+        }
+
     }
 
 });
 
 app.post('/registro', (req, res) => {
+    console.log("-- post / registro -->[server]")
     let rta = Seguridad.regUsu(req.body);
+
     rta ? res.render('exito',{}) : res.render('falla',{});
 });
 
@@ -76,5 +88,5 @@ app.post('/mercaderia',(req, res)=>{
 
 
 app.listen(3000, () => {
-    console.log('Servidor iniciado en http://localhost:3000');
+    console.log('Servidor iniciado en http://localhost:3000   -----------------------------------');
 });

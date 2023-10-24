@@ -9,6 +9,17 @@
     <h1>Sistema Checklist</h1>
     <h2>Menú:</h2>
     <hr>   
+    <pre><%= contenido %></pre>
+    <pre><%= valUsu.carga.nombre %></pre>
+    <pre><%= valUsu.carga.apellido %></pre>
+    <pre><%= valUsu.carga.nomUsu %></pre>
+    <button onclick="volver()">Salir</button>
     
+
+    <script>
+        function volver(){
+            location.href = "http://localhost:3000";
+        }
+    </script>
 </body>
 </html>

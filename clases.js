@@ -107,12 +107,30 @@ function testSegUsuario(){
     console.log(oSU);
 }
 
-
-function test(){
-    testUsuario();
-    testSegUsuario();    
+class TokUsu{
+    constructor(usu, segUsu){
+        this.nombre = usu.nombre;
+        this.apellido = usu.apellido;
+        this.nomUsu = usu.nomUsu;
+        this.token = segUsu.token;
+    }
 }
 
-//test()
+function testTokUsu(){
+    const testUsu = new Usuario();
+    testUsu.nombre = "testNombre"
+    testUsu.apellido = "testApellido"
+    testUsu.nomUsu = "testNomUsu"
 
-module.exports = {Usuario, SegUsuario};
+    const oSU = new SegUsuario("Enzo","1234");
+    oSU.setToken("39mv0nct89u98mwc8cctmw")
+    oSU.setDateToken(new Date());
+
+    const miTokUsu = new TokUsu(testUsu, oSU);
+    console.log(miTokUsu);
+}
+
+
+
+
+module.exports = {Usuario, SegUsuario, TokUsu, testUsuario, testSegUsuario, testTokUsu};
