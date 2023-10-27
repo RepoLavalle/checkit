@@ -43,21 +43,6 @@ class Usuario{
 
 }
 
-function testUsuario(){
-    const testUsu = new Usuario();
-    testUsu.nombre = "testNombre"
-    testUsu.apellido = "testApellido"
-    testUsu.nomUsu = "testNomUsu"
-    console.log(testUsu);
-    const testUsuStr = JSON.stringify(testUsu)
-    console.log(testUsuStr)
-    const recuTestUsu = Usuario.fromJSON(JSON.parse(testUsuStr));
-    console.log(recuTestUsu);
-    console.log(recuTestUsu.getNombre());
-    console.log(recuTestUsu.getApellido());
-    console.log(recuTestUsu.getNomUsu());
-}
-
 class SegUsuario{
     constructor(nomUsu, pass){
          this.nomUsu = nomUsu
@@ -100,13 +85,6 @@ class SegUsuario{
        
 }
 
-function testSegUsuario(){
-    const oSU = new SegUsuario("Enzo","1234");
-    oSU.setToken("39mv0nct89u98mwc8cctmw")
-    oSU.setDateToken(new Date());
-    console.log(oSU);
-}
-
 class TokUsu{
     constructor(usu, segUsu){
         this.nombre = usu.nombre;
@@ -116,21 +94,60 @@ class TokUsu{
     }
 }
 
-function testTokUsu(){
-    const testUsu = new Usuario();
-    testUsu.nombre = "testNombre"
-    testUsu.apellido = "testApellido"
-    testUsu.nomUsu = "testNomUsu"
+// Clases del modelo ---------------------------------
+class Control{
+    constructor(){
+        this.parametro="";
+        this.periodicidad = 1;
+        this.prorrogable = true;
+        this.reajustable = true;
+        this.observadores = [];
+    }
 
-    const oSU = new SegUsuario("Enzo","1234");
-    oSU.setToken("39mv0nct89u98mwc8cctmw")
-    oSU.setDateToken(new Date());
+    suscribir(lis){
+        this.observadores.push(lis)
+    }
 
-    const miTokUsu = new TokUsu(testUsu, oSU);
-    console.log(miTokUsu);
+    setReajustable(re){
+        this.reajustable;
+    }
+
+    getReajustable(){
+        this.reajustable;
+    }
+
+    setProrrogable(pro){
+        this.prorrogable = pro;
+    }
+
+    getProrrogable(){
+        return this.prorrogable;
+    }
+
+    setPeriodicidad(per){
+        this.periodicidad;
+    }
+
+    getPeriodicidad(){
+        return this.periodicidad;
+    }
+    setParametro(par){
+        this.parametro = par;
+    }
+
+    getParametro(){
+        return this.parametro;
+    }
 }
 
+class Lista{
+    constructor(){
+        this.nombre;
+        this.controles = [];
+    }
 
-
-
-module.exports = {Usuario, SegUsuario, TokUsu, testUsuario, testSegUsuario, testTokUsu};
+    actualizar(){
+        
+    }
+}
+module.exports = {Usuario, SegUsuario, TokUsu};

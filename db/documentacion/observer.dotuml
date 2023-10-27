@@ -1,0 +1,39 @@
+ClassDiagram [frame=true framecolor=steelblue label="Class Diagram"] {
+
+class Control {
+    parametro: string
+    periodicidad: integer
+    prorrogable: bool
+    reajustable: bool
+    observadores: Lista
+
+    suscribir(Lista):void
+    notificar():void
+    
+
+ }
+  
+  class Lista {
+    private nombre : string
+
+    actualizar(): void
+    
+   }
+
+
+  class Verificador{
+    private nombre : string
+    
+   }
+  
+  class ColVerificador{
+    private verificadores : Verificador
+  }
+  
+
+  
+  class ColLista{
+    private listas : Lista
+    }
+
+}

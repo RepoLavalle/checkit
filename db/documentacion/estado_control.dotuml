@@ -1,0 +1,8 @@
+StateDiagram{
+
+    state qdeh as "Qué día \n es hoy"
+    state scd as "Soy un control \n diario?"
+    state mvh as "Me verificaron \n hoy?"
+
+
+}

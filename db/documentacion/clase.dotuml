@@ -1,0 +1,35 @@
+
+ClassDiagram [frame=true framecolor=steelblue label="Class Diagram"] {
+ class Control {
+  private parametro: string
+	
+ }
+  
+  class ColControl{
+    private controles: Control 
+  }
+	
+  class Verificador{
+    private nombre : string
+    
+   }
+  
+  class ColVerificador{
+    private verificadores : Verificador
+  }
+  
+  class Lista {
+    private nombre : string
+    
+   }
+  
+  class ColLista{
+    private listas : Lista
+    }
+  Verificador "1" --> ColLista "0..n"
+  Lista "1" --> Control "0..n"
+  Verificador "1" --> ColControl "0..n"
+  ColControl "1" --> Control "0..n"
+  ColLista "1" --> Lista "0..n"
+  ColVerificador "1" --> Verificador "0..n" 
+}
