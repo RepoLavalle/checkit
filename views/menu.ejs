@@ -17,8 +17,58 @@
     <div id="cu10">
         <hr>
         <h2>Nuevo Control</h2>
-        <label for="">Texto del Coontrol</label>
-        <input type="text" name=""
+        <p>
+        <label for="parametro">Parámetro:&nbsp;</label>
+        <input type="text" name="parametro" id="parametro">
+        </p>
+        <p>
+        <label for="periodicidad">Periodicidad:&nbsp;</label>
+        <input type="number" name="periodicidad" id="periodicidad">
+        </p>
+        <p>
+        <label>Prorrogable:</label>
+        <input type="radio" id="radio11" name="prorrogable" value="si">
+        <label for="radio1">Sí</label>
+        <input type="radio" id="radio12" name="prorrogable" value="no">
+        <label for="radio2">No</label>
+        </p>
+        <p>
+        <label>Reajustable:</label>
+        <input type="radio" id="radio21" name="reajustable" value="si">
+        <label for="radio1">Sí</label>
+        <input type="radio" id="radio22" name="reajustable" value="no">
+        <label for="radio2">No</label>
+        </p>
+        <p><label>A partir de:&nbsp;</label><input type="date"  id="desde" name="desde"></p>
+
+        <button onclick="cu10_nuevoControl()">Agregar</button>
+
+        <script>
+            function cu10_nuevoControl(){
+                let cu10Nombre = document.getElementById('parametro').value;
+                console.log(cu10Nombre);
+
+                let per = document.getElementById('periodicidad').value;
+                console.log(per)
+
+                pro = document.getElementsByName('prorrogable');
+                let prorrogable = false;
+                pro[0].checked?prorrogable=true:prorrogable=false;
+                console.log(prorrogable);
+
+                rea = document.getElementsByName('reajustable');
+                let reajustable = false;
+                rea[0].checked? reajustable=true:null;
+                console.log(reajustable);
+
+                des = document.getElementById('desde').value;
+                console.log(des)
+                console.log(JSON.stringify(des))
+
+                
+
+            }
+        </script>
     </div>
     
 

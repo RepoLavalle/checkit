@@ -6,6 +6,7 @@ class Usuario{
         this.apellido;
         this.nomUsu;
         this.type = "Usuario";
+        this.controles = []
     }
 
     static fromJSON(json){
@@ -19,6 +20,10 @@ class Usuario{
         }else{
             return "Error de tipo."
         }
+    }
+
+    agregarControl(con){
+        this.controles.push(con)
     }
 
     setNombre(arg){
@@ -102,6 +107,15 @@ class Control{
         this.prorrogable = true;
         this.reajustable = true;
         this.observadores = [];
+        this.ultimaVer = "";
+    }
+
+    setUltimaVer(dat){
+        this.ultimaVer = dat;
+    }
+
+    getUltimaVer(){
+        return this.ultimaVer;
     }
 
     suscribir(lis){
@@ -109,7 +123,7 @@ class Control{
     }
 
     setReajustable(re){
-        this.reajustable;
+        this.reajustable = re;
     }
 
     getReajustable(){
@@ -125,7 +139,7 @@ class Control{
     }
 
     setPeriodicidad(per){
-        this.periodicidad;
+        this.periodicidad = per;
     }
 
     getPeriodicidad(){
@@ -144,10 +158,139 @@ class Lista{
     constructor(){
         this.nombre;
         this.controles = [];
+        this.observadores = [];
+        this.verificadores = [];
+    }
+
+    agregarObservador(obs){
+        this.observadores.push(obs);
+    }
+
+    agregarVerificador(ver){
+        this.verificadores.push(ver);
+    }
+
+    agregarControl(con){
+        this.controles.push(con);
     }
 
     actualizar(){
-        
+
+    }
+
+    setNombre(nom){
+        this.nombre = nom;
+    }
+
+    getNombre(){
+        return this.nombre;
     }
 }
-module.exports = {Usuario, SegUsuario, TokUsu};
+
+class Partida{
+    constructor(){
+        this.verificadores = [];
+        this.listas = [];
+    }
+
+    agregarVerificador(ver){
+        this.verificadores.push(ver);
+    }
+
+    agregarLista(lis){
+        this.listas.push(lis);
+    }
+}
+
+function testObserver(){
+
+    /*   Creo una lista  */
+    let unaLista = new Lista();
+    unaLista.setNombre("testLista");
+    console.log(unaLista);
+
+    /* Creo un control  previo*/
+    let unControl = new Control();
+    unControl.setParametro("Tensión de Baterías");
+    unControl.setPeriodicidad(2);
+    unControl.setProrrogable(true);
+    unControl.setReajustable(true);
+    unControl.setUltimaVer(new Date(2023,9,30,0,0,0,0));
+    console.log(unControl);
+
+    /* Creo otro Control posterior*/
+    let esteControl = new Control();
+    esteControl.setParametro("Pago alojamiento");
+    esteControl.setPeriodicidad(4);
+    esteControl.setProrrogable(true);
+    esteControl.setReajustable(true);
+    esteControl.setUltimaVer(new Date(2023,9,30,0,0,0,0))
+
+    /* Creo otro Control posterior*/
+    let otroControl = new Control();
+    otroControl.setParametro("Estado de Red");
+    otroControl.setPeriodicidad(6);
+    otroControl.setProrrogable(true);
+    otroControl.setReajustable(true);
+    otroControl.setUltimaVer(new Date(2023,9,30,0,0,0,0))
+
+    /* Creo un usuario */
+    let unUsuario = new Usuario();
+    unUsuario.setNomUsu("testUsu");
+    unUsuario.setNombre("testNombre");
+    unUsuario.setApellido("test Apellido");
+    console.log(unUsuario);
+
+    /* Creo un usuario verificador */
+    let unVerificador = new Usuario();
+    unVerificador.setNombre("nombre verificador");
+    unVerificador.setApellido("apell Verificador");
+    unVerificador.setNomUsu("testUsuVer");
+
+    /* Agrego una observador a la lista */
+    unaLista.agregarObservador(unUsuario)
+    /* Agrego un control a la lista  */
+    unaLista.agregarControl(unControl);
+    /* Agrego un verificador a la lista */
+    unaLista.agregarVerificador(unVerificador);
+    /* Agregar otro control */
+    unaLista.agregarControl(otroControl);
+    unaLista.agregarControl(esteControl);
+
+    console.log("Lista -----------------");
+    console.log(unaLista);
+
+    procesarLista(unaLista);
+
+
+}
+
+function procesarLista(lis){
+    console.log("Procesanso Lista ------------------------------------");
+    var fecha = new Date();
+    console.log(fecha.toLocaleString());
+    
+    console.log("Lista sin procesar:")
+    console.log(lis)
+    let hoy = new Date();
+    console.log(lis.controles.forEach(x=>{
+        console.log((hoy.getTime() - x.ultimaVer.getTime())/(1000*60*60*24));
+        let ddias = parseInt((hoy.getTime() - x.ultimaVer.getTime())/(1000*60*60*24))
+        console.log("ddias: "+ddias)
+        console.log("periodicidad: ",x.periodicidad)
+        let difd = x.periodicidad - ddias
+        console.log("difd: "+ difd)
+        console.log(x.periodicidad <= parseInt((hoy.getTime() - x.ultimaVer.getTime())/(1000*60*60*24)))
+
+
+    }));
+
+    let nuevaLis = lis.controles.filter(x=>(x.periodicidad <= parseInt((hoy.getTime() - x.ultimaVer.getTime())/(1000*60*60*24))))
+    console.log("Lista procesada: ------------------------")
+    console.log(nuevaLis)
+}
+
+testObserver();
+
+
+module.exports = {Usuario, SegUsuario, TokUsu, Control};

@@ -1,6 +1,16 @@
 const fs = require('fs')
 const Clases = require('./clases.js');
 
+function dameColeccion(col){
+    if(col = "usuarios"){
+       var texto = fs.readFileSync('./db/usuarios.txt','utf-8') 
+    }
+    return texto;    
+}
+
+function guardarColeccion(){
+
+}
 
 function testEscritura(){
     fs.writeFileSync('./db/seguridad.txt',JSON.stringify(new Date()))
@@ -181,4 +191,4 @@ function validarUsuario(arg){
 
 
 
-module.exports = {agregarUsuario, agregarSegUsuario, nomUsuExiste, eliminarUsuario, eliminarSegUsuario, obtenerUsuario, obtenerSegUsuario}
+module.exports = {agregarUsuario, agregarSegUsuario, nomUsuExiste, eliminarUsuario, eliminarSegUsuario, obtenerUsuario, obtenerSegUsuario, dameColeccion}

@@ -1,6 +1,17 @@
 const Clases = require('./clases.js');
 const Modelo = require('./modelo.js');
 
+function testControl(){
+    let unControl = new Clases.Control();
+    unControl.setParametro("Tensión de Baterías");
+    unControl.setPeriodicidad(2);
+    unControl.setProrrogable(true);
+    unControl.setReajustable(true);
+    unControl.setUltimaVer(new Date(2023,9,30,0,0,0,0));
+    console.log(unControl);
+}
+testControl();
+
 //  agregarUsuario-----------------------------------
 function testAgregarUsuario(){
     const nU = new Clases.Usuario();
@@ -61,18 +72,29 @@ testEliminarSegUsuario()
 
 //   Clase Usuario ---------------------------------
 function testUsuario(){
+    console.log("testUsuario----------------------------------------")
     const testUsu = new Clases.Usuario();
     testUsu.nombre = "testNombre"
     testUsu.apellido = "testApellido"
     testUsu.nomUsu = "testNomUsu"
-    console.log(testUsu);
+    //console.log(testUsu);
     const testUsuStr = JSON.stringify(testUsu)
-    console.log(testUsuStr)
+    //console.log(testUsuStr)
     const recuTestUsu = Clases.Usuario.fromJSON(JSON.parse(testUsuStr));
-    console.log(recuTestUsu);
-    console.log(recuTestUsu.getNombre());
-    console.log(recuTestUsu.getApellido());
-    console.log(recuTestUsu.getNomUsu());
+    //console.log(recuTestUsu);
+
+    //Agrego control a colecciòn de controles
+    let unControl = new Clases.Control();
+    unControl.setParametro("Tensión de Baterías");
+    unControl.setPeriodicidad(2);
+    unControl.setProrrogable(true);
+    unControl.setReajustable(true);
+    unControl.setUltimaVer(new Date(2023,9,30,0,0,0,0));
+
+    testUsu.agregarControl(unControl);
+    console.log(testUsu)
+
+    console.log("fin-----------------------------------------------")
 }
 testUsuario();
 
@@ -100,6 +122,11 @@ function testTokUsu(){
 }
 testTokUsu();
 
-
+function testDameColeccion(){
+    console.log("testDameColeccion----------------------")
+    console.log(Modelo.dameColeccion("usuarios"));
+    console.log("testDameColeccion----------------------")    
+}
+testDameColeccion();
 
 

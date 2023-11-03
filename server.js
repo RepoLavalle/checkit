@@ -82,6 +82,7 @@ app.post('/mercaderia',(req, res)=>{
     console.log(JSON.stringify(req.body));
 })
 
+// cu10 nuevo Control
 
 
 
