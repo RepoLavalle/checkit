@@ -8,5 +8,5 @@ SequenceDiagram{
   web --> ser "post/api"
   ser --> seg "procesar(carga)"
   seg --> con "procesar(layer1)"
-  con --> mod "
+  con --> mod "guardarControl \n (Control)"
 }

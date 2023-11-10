@@ -1,1 +1,1 @@
-[{"type":"Usuario","nombre":"Adrian","apellido":"Vonkunoschy","nomUsu":"adrian"},{"type":"Usuario","nombre":"Tomás","apellido":"Camargo","nomUsu":"tomy"}]
+[{"type":"Usuario","controles":[],"apellido":"testApellido","nomUsu":"testNomUsu","nombre":"testNombre"},{"type":"Usuario","controles":[],"apellido":"testApellido2","nomUsu":"testNomUsu2","nombre":"testNombre2"},{"type":"Usuario","controles":[],"nombre":"Oracio","apellido":"Guardia","nomUsu":"ora"}]

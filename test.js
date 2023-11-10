@@ -1,16 +1,9 @@
 const Clases = require('./clases.js');
 const Modelo = require('./modelo.js');
+const Controlador = require('./controlador.js');
+const fs = require('fs')
 
-function testControl(){
-    let unControl = new Clases.Control();
-    unControl.setParametro("Tensión de Baterías");
-    unControl.setPeriodicidad(2);
-    unControl.setProrrogable(true);
-    unControl.setReajustable(true);
-    unControl.setUltimaVer(new Date(2023,9,30,0,0,0,0));
-    console.log(unControl);
-}
-testControl();
+
 
 //  agregarUsuario-----------------------------------
 function testAgregarUsuario(){
@@ -77,13 +70,7 @@ function testUsuario(){
     testUsu.nombre = "testNombre"
     testUsu.apellido = "testApellido"
     testUsu.nomUsu = "testNomUsu"
-    //console.log(testUsu);
-    const testUsuStr = JSON.stringify(testUsu)
-    //console.log(testUsuStr)
-    const recuTestUsu = Clases.Usuario.fromJSON(JSON.parse(testUsuStr));
-    //console.log(recuTestUsu);
-
-    //Agrego control a colecciòn de controles
+ 
     let unControl = new Clases.Control();
     unControl.setParametro("Tensión de Baterías");
     unControl.setPeriodicidad(2);
@@ -93,6 +80,8 @@ function testUsuario(){
 
     testUsu.agregarControl(unControl);
     console.log(testUsu)
+
+    
 
     console.log("fin-----------------------------------------------")
 }
@@ -125,8 +114,56 @@ testTokUsu();
 function testDameColeccion(){
     console.log("testDameColeccion----------------------")
     console.log(Modelo.dameColeccion("usuarios"));
-    console.log("testDameColeccion----------------------")    
+    let colUsu = Modelo.dameColeccion("usuarios");
+    console.log(colUsu);
+    console.log("fin-----------------------------------")    
 }
 testDameColeccion();
+
+function testProcesar(){
+    console.log("test.js testProcesar()-----------------")
+    Controlador.procesar();
+    console.log("Fin-----------------------------")
+
+}
+testProcesar();
+
+function testControl(){
+    console.log("testControl----------------------------")
+    
+    let unControl = new Clases.Control();
+    unControl.setParametro("Tensión de Baterías");
+    unControl.setPeriodicidad(2);
+    unControl.setProrrogable(true);
+    unControl.setReajustable(true);
+    unControl.setUltimaVer(new Date(2023,9,30,0,0,0,0));
+
+    const recControl = JSON.parse(JSON.stringify(unControl))
+
+    const obRecControl = Clases.Control.fromJSON(recControl);
+
+    console.log(unControl[Object.keys(unControl)[0]] === obRecControl[Object.keys(obRecControl)[0]])
+    console.log(unControl[Object.keys(unControl)[1]] === obRecControl[Object.keys(obRecControl)[1]])
+    console.log(unControl[Object.keys(unControl)[2]] === obRecControl[Object.keys(obRecControl)[2]])
+    console.log(unControl[Object.keys(unControl)[3]] === obRecControl[Object.keys(obRecControl)[3]])
+    console.log(unControl[Object.keys(unControl)[4]].getTime() === obRecControl[Object.keys(obRecControl)[4]].getTime())
+    console.log(unControl[Object.keys(unControl)[5]] === obRecControl[Object.keys(obRecControl)[5]]) 
+
+}
+testControl();
+
+
+function testAgregarUsuario(){
+
+    // Instancio un usuario   
+    const usu = new Clases.Usuario();
+    usu.setApellido("testApellido2")
+    usu.setNomUsu("testNomUsu2")
+    usu.setNombre("testNombre2")
+
+    Modelo.agregarUsuario(usu);
+
+}
+testAgregarUsuario()
 
 

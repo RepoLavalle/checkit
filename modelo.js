@@ -1,11 +1,14 @@
 const fs = require('fs')
 const Clases = require('./clases.js');
 
+
 function dameColeccion(col){
     if(col = "usuarios"){
-       var texto = fs.readFileSync('./db/usuarios.txt','utf-8') 
+       let txt_col = fs.readFileSync('./db/usuarios.txt','utf-8')
+       let obj_col = JSON.parse(txt_col)
+       return obj_col
     }
-    return texto;    
+    return null;    
 }
 
 function guardarColeccion(){
@@ -52,9 +55,16 @@ function agregarUsuario(obj){
     if(str_colObj){
         obj_colObj = JSON.parse(str_colObj);
     }
-    obj_colObj.push(obj)
-    str_colObj = JSON.stringify(obj_colObj)
-    fs.writeFileSync('./db/usuarios.txt',str_colObj)
+    let repetido = obj_colObj.filter(x => x.nomUsu === obj.nomUsu)
+    if(repetido.length == 0){
+        repetido.length == 0? obj_colObj.push(obj) : null;
+        str_colObj = JSON.stringify(obj_colObj)
+        fs.writeFileSync('./db/usuarios.txt',str_colObj)
+        return true
+    }else{
+        return false
+    }
+
 }
 
 
@@ -185,6 +195,10 @@ function validarUsuario(arg){
     console.log(arg)
 
     return true
+}
+
+function guardarControl(usu, con){
+
 }
 
 

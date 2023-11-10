@@ -106,8 +106,24 @@ class Control{
         this.periodicidad = 1;
         this.prorrogable = true;
         this.reajustable = true;
-        this.observadores = [];
+        //this.observadores = [];
         this.ultimaVer = "";
+        this.type = "Control"
+    }
+
+    static fromJSON(json){
+        if(json.type = "Control"){
+            const obCon = new Control();
+            obCon.setParametro(json.parametro)
+            obCon.setPeriodicidad(parseInt(json.periodicidad))
+            obCon.setProrrogable(json.prorrogable)
+            obCon.setReajustable(json.reajustable)
+            obCon.setUltimaVer(new Date(json.ultimaVer))
+            obCon.type = json.type
+            return obCon
+        }else{
+            return "Error de typo"
+        }
     }
 
     setUltimaVer(dat){
@@ -201,6 +217,7 @@ class Partida{
         this.listas.push(lis);
     }
 }
+//-----------------------------------
 
 function testObserver(){
 
@@ -291,6 +308,6 @@ function procesarLista(lis){
 }
 
 testObserver();
-
+//-----------------------------------
 
 module.exports = {Usuario, SegUsuario, TokUsu, Control};
