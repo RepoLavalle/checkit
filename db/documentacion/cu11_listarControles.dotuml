@@ -1,0 +1,16 @@
+SequenceDiagram{
+  lifeline web 
+  lifeline ser as "server"
+  lifeline seg as "seguiridad"
+  lifeline con as "controlador"
+  lifeline mod as "modelo"
+
+  web --> ser "post/api"
+  ser --> seg "procesar(carga)"
+  seg --> con "procesar(carga)"
+  con --> mod "dameUsuarios()"
+  con <-r- mod "[Usuario]"
+  seg <-r- con "[Usuario]"
+  ser <-r- seg "[Usuario]"
+  web <-r- ser "[Usuario]"
+}

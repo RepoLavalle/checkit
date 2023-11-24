@@ -4,7 +4,7 @@
   "description": "Sitema de Listas de Verificación Checkit.",
   "main": "server.js",
   "scripts": {
-    "test": "test.js",
+    "test": "",
     "start": "nodemon server.js"
   },
   "author": "",

@@ -5,27 +5,53 @@ const Clases = require('./clases.js');
 function dameColeccion(col){
     if(col = "usuarios"){
        let txt_col = fs.readFileSync('./db/usuarios.txt','utf-8')
+
        let obj_col = JSON.parse(txt_col)
+
        return obj_col
     }
     return null;    
 }
 
-function guardarColeccion(){
-
+function guardarColeccion(col, data){
+    if(col = "usuarios"){
+        fs.writeFileSync('./db/usuarios.txt',JSON.stringify(data))
+    }
 }
 
-function testEscritura(){
-    fs.writeFileSync('./db/seguridad.txt',JSON.stringify(new Date()))
+function guardarUsuarios(data){
+    guardarColeccion("usuarios",data)
 }
 
-function testLectura(){
-    var texto = fs.readFileSync('./db/seguridad.txt','utf-8')
-    console.log(texto)
+function dameUsuarios(){
+    let A_usuarios = dameColeccion("usuarios");
+ 
+    let B_usuarios = []
+    for(var i=0 ; i<A_usuarios.length ; i++){
+        tmp_usuario = Clases.Usuario.fromJSON(A_usuarios[i])
+
+        let B_controles = [];
+        if(A_usuarios[i].controles.length > 0){
+
+            for(var j=0 ; j<A_usuarios[i].controles.length ; j++){
+                
+                B_controles.push(Clases.Control.fromJSON(A_usuarios[i].controles[j]))
+            }
+    
+        }
+
+        tmp_usuario.controles = B_controles
+        B_usuarios.push(tmp_usuario)
+    }
+ 
+    return B_usuarios
 }
 
-//testEscritura()
-//testLectura()
+//dameUsuarios()
+
+
+
+
 
 //-----------------------------------------------
 function guardarObjeto(obj){
@@ -38,6 +64,7 @@ function guardarObjeto(obj){
     str_colObj = JSON.stringify(obj_colObj)
     fs.writeFileSync('./db/seguridad.txt',str_colObj)
 }
+
 function testGuardarObjeto(){
     const miOb = {}
     miOb.nombre = "Enzo"
@@ -127,11 +154,13 @@ function obtenerUsuario(nomU){
         obj_colObj = JSON.parse(str_colObj);
     }
     let obj_colObj2 = obj_colObj.filter(x=>x.nomUsu == nomU)
-    console.log("obj_colObj2")
-    console.log(obj_colObj2)
+    // console.log("obj_colObj2")
+    // console.log(obj_colObj2)
     if(obj_colObj2.length === 1){
-        console.log("<-r- modelo 'Usuario'")
-        return obj_colObj2[0]
+        console.log("<-r- mod 'Usuario'")
+        let xusuario = Clases.Usuario.fromJSON(obj_colObj2[0])
+        //return obj_colObj2[0]
+        return xusuario
     }else{
         console.log("<-r- modelo '{}'")
         return {}
@@ -141,7 +170,7 @@ function obtenerUsuario(nomU){
 
 function obtenerSegUsuario(segU){
     // cu no implementado
-    console.log("--obtenerSegUsuario(nomU)-->[modelo]")
+    console.log("--> mod 'obtenerSegUsuario(nomU)'")
     let str_colObj = fs.readFileSync('./db/seguridad.txt','utf-8')
     let obj_colObj = []
     if(str_colObj){
@@ -150,7 +179,7 @@ function obtenerSegUsuario(segU){
     let obj_colObj2 = obj_colObj.filter(x=>x.nomUsu == segU)
 
     if(obj_colObj2.length == 1){
-        console.log("<-r- modelo 'SegUsuario'")
+        console.log("<-r- mod 'SegUsuario'")
         return obj_colObj2[0]
     }else{
         console.log("<-r- modelo '{}'")
@@ -160,7 +189,7 @@ function obtenerSegUsuario(segU){
 
 function nomUsuExiste(data){
     // cu No Implementado
-    console.log("--nomUsuExiste(s_monUsu)-->[modelo]")
+    console.log("--> mod 'nomUsuExiste(s_monUsu)'")
     
 
     //Levanto todos los SegUsuarios de usuarios.txt
@@ -168,18 +197,13 @@ function nomUsuExiste(data){
     let obj_colObj = []
     if(str_colObj){
         obj_colObj = JSON.parse(str_colObj);
-        console.log("[Modelo] objetos leìdos y parsedados")
-        console.log(obj_colObj)
     }
 
     //Filtro por nombre de usuario
     let tmp = obj_colObj.filter(x=>x.nomUsu == data.user && x.pass == data.pass)
-    console.log("Objetos filtrados por usuario y contraseña")
-    console.log(tmp)
 
     //Si la cuenta del fitrado es uno, devuelvo true
     //Si la cuenta del filtrado es distinto de uno devuelvo false
-    
     if(tmp.length == 1){
         console.log("<-r- mod 'true'")
         return true;
@@ -197,7 +221,14 @@ function validarUsuario(arg){
     return true
 }
 
-function guardarControl(usu, con){
+function actualizarUsuario(usu){
+    //Recupero usuarios de la base de datos
+    
+    //Recorro el vector hasta encontrar el usuario buscado
+
+    //Reemplazo el usuario en la colección
+
+    //Guardo nuevamente el la colección.
 
 }
 
@@ -205,4 +236,4 @@ function guardarControl(usu, con){
 
 
 
-module.exports = {agregarUsuario, agregarSegUsuario, nomUsuExiste, eliminarUsuario, eliminarSegUsuario, obtenerUsuario, obtenerSegUsuario, dameColeccion}
+module.exports = {guardarUsuarios , dameUsuarios, agregarUsuario, agregarSegUsuario, nomUsuExiste, eliminarUsuario, eliminarSegUsuario, obtenerUsuario, obtenerSegUsuario, dameColeccion, actualizarUsuario}

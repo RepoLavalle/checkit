@@ -1,0 +1,8 @@
+ClassDiagram [frame=true framecolor=steelblue label="Class Diagram"] {
+
+    class respuesta{
+        validar: boolean
+        carga: TokUsu
+    }
+ 
+}

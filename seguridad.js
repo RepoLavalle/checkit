@@ -1,6 +1,7 @@
 const Clases = require('./clases.js')
 const Modelo = require('./modelo.js')
 const { v4: uuidv4 } = require('uuid');
+const Controlador = require('./controlador.js');
 
 //const uuid = uuidv4();
 //console.log(uuid);
@@ -24,7 +25,7 @@ function regUsu(data){
         segUsu.setNomUsu(data.nomUsu);
         segUsu.setPass(data.pass);
         segUsu.setToken(uuidv4());
-        segUsu.setDateToken(new Date());
+        segUsu.setDateToken(ya());
 
         Modelo.agregarUsuario(usua);
         Modelo.agregarSegUsuario(segUsu);
@@ -41,22 +42,20 @@ function regUsu(data){
 
 function validarUsuario(data){
     console.log("--> seg 'validarUsuario(data)'")
-    //console.log(data)
+    // Este mètodo sirve para generar el primer token de usuario de sesión.
     // pregunto si el usuario existe
     let tmp1 = Modelo.nomUsuExiste(data)
-    //console.log(tmp1);
-    // si el usuario existe, pido usuario y seguridad usuario
-
+    
+    
     let respuesta={}
     if(tmp1){
 
+        // si el usuario existe, pido usuario y seguridad usuario
         let usuario_A = Modelo.obtenerUsuario(data.user);
         let usuario_AS= Modelo.obtenerSegUsuario(data.user);
+        // Instancio un Token de Usuario
         let unTokUsu = new Clases.TokUsu(usuario_A, usuario_AS);
-        console.log(usuario_A)
-        console.log(usuario_AS)
-        console.log("Usuario correcto")
-        
+
         respuesta.validar = true;
         respuesta.carga = unTokUsu;
     }else{
@@ -65,26 +64,38 @@ function validarUsuario(data){
         respuesta.carga = {};        
     }
 
+    console.log("<-r- seg '{respuesta}'")
     return respuesta
 
 }
 
-function testValidarUsuario(){
-    let testObj ={
-        user: 'Nexo',
-        pass: '1234',
-        cu00: 'Ingresar'
-      }
-    validarUsuario(testObj)
-        let testObj2 ={
-        user: 'Nexo',
-        pass: '12345',
-        cu00: 'Ingresar'
-      }
-    validarUsuario(testObj)
-    validarUsuario(testObj2)
+function procesar(data){
+    console.log("--> seguridad 'procesar(data)'")
+    let segUsu = Modelo.obtenerSegUsuario(data.usuario.nomUsu)
+
+    if((ya().getTime() - (new Date(segUsu.dateToken)).getTime()  ) /(1000*60*60*24) < 20){
+        console.log("seg --> con 'procesar(data)' ")
+        let tmp = Controlador.procesar(data)
+        console.log("<-r- seg 'procesar(data)' ")
+        return tmp
+    }else{
+        console.log("<-r- seg 'token vencido'");
+        return false;
+    }
 }
 
-//testValidarUsuario();
+function validarToken(data){
 
-module.exports = {regUsu, validarUsuario};
+}
+
+function ya(){
+    // console.log(new Date());
+    // console.log(new Date().getTime());
+    // console.log(new Date().getTime() - 3*60*60*1000);
+    // console.log(new Date(new Date().getTime() - 3*60*60*1000));
+    return (new Date(new Date().getTime() - 3*60*60*1000));
+}
+
+ya();
+
+module.exports = {regUsu, validarUsuario, procesar, ya};

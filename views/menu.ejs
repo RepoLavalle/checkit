@@ -9,7 +9,7 @@
     <h1>Sistema Checklist</h1>
     <h2>Menú:</h2>
     <hr>   
-    <pre><%= contenido %></pre>
+    <pre id='intercambio'><%= contenido %></pre>
     <pre><%= valUsu.carga.nombre %></pre>
     <pre><%= valUsu.carga.apellido %></pre>
     <pre><%= valUsu.carga.nomUsu %></pre>
@@ -43,32 +43,104 @@
 
         <button onclick="cu10_nuevoControl()">Agregar</button>
 
+        <hr>
+
+        <button onclick="cu11_listarControles()">Mis controles</button>
+        <div id="cu11_listarControles"></div>
+
         <script>
+
+            var str_data = document.getElementById('intercambio').innerText;
+            console.log(str_data);
+            let user = JSON.parse(str_data)
+            console.log(user);
+
+
             function cu10_nuevoControl(){
                 let cu10Nombre = document.getElementById('parametro').value;
-                console.log(cu10Nombre);
+                document.getElementById('parametro').value = "";
+                //console.log(cu10Nombre);
 
                 let per = document.getElementById('periodicidad').value;
-                console.log(per)
+                document.getElementById('periodicidad').value = "";
+                //console.log(per)
 
                 pro = document.getElementsByName('prorrogable');
                 let prorrogable = false;
                 pro[0].checked?prorrogable=true:prorrogable=false;
-                console.log(prorrogable);
+                document.getElementsByName('prorrogable').checked = false
+                //console.log(prorrogable);
 
                 rea = document.getElementsByName('reajustable');
                 let reajustable = false;
                 rea[0].checked? reajustable=true:null;
                 console.log(reajustable);
 
-                des = document.getElementById('desde').value;
-                console.log(des)
-                console.log(JSON.stringify(des))
+                document.getElementById('radio11').checked = false
+                document.getElementById('radio12').checked = false
+                document.getElementById('radio21').checked = false
+                document.getElementById('radio22').checked = false
 
-                
+                des = document.getElementById('desde').value;
+                document.getElementById('desde').value = ""
+                // console.log(des)
+                // console.log(JSON.stringify(des))
+
+                let layer0 = {}
+                layer0.parametro = cu10Nombre
+                layer0.periodicidad = per
+                layer0.prorrogable = prorrogable
+                layer0.reajustable = reajustable
+                layer0.desde = des
+
+                let layer1 = {}
+                layer1.cu = "nuevoControl"
+                layer1.carga = layer0
+                layer1.usuario = user
+
+                fetch('http://localhost:3000/api',{
+                    method: 'POST',
+                    body: JSON.stringify(layer1),
+                    headers: {'Content-Type' : 'application/json'}
+                })
 
             }
-        </script>
+
+            function cu11_listarControles(){
+                //alert('running listar controles...')
+                let layer0 = {}
+
+                let layer1 = {}
+                layer1.cu = "cu11_listarControles"
+                layer1.carga = layer0
+                layer1.usuario = user
+
+                fetch('http://localhost:3000/api',{
+                    method: 'POST',
+                    body: JSON.stringify(layer1),
+                    headers: {'Content-Type' : 'application/json'}
+                })
+                .then(data=>data.json())
+                .then(data=>listarControles(data[0]))
+
+            }
+
+            function listarControles(data){
+                console.log(data);
+                for(var i=0 ; i<data.controles.length ; i++){
+                    console.log(data.controles[i].parametro +" - "+data.controles[i].periodicidad+
+                    " - "+data.controles[i].prorrogable+
+                    " - "+data.controles[i].reajustable )
+                }
+                var str = ""
+                for(var i=0 ; i<data.controles.length ; i++){
+                    str += "<p><input type='checkbox' name='eliminar'>"+data.controles[i].parametro +" - "+data.controles[i].periodicidad+
+                    " - "+data.controles[i].prorrogable+
+                    " - "+data.controles[i].reajustable+"</p>"
+                }
+                document.getElementById('cu11_listarControles').innerHTML = str;
+            }
+</script>
     </div>
     
 

@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/login',(req, res)=>{
-    console.log(" nav --> ser 'post/login'");
+    console.log(" web --> ser 'post/login'");
     //console.log(JSON.stringify(req.body));
     if(req.body.cu00 == "Nuevo"){
         console.log("<-- registro--[server]")
@@ -48,7 +48,7 @@ app.post('/login',(req, res)=>{
 
         if(valUsu.validar){
             let contenido = JSON.stringify(valUsu.carga)
-            console.log("nav <-r- server 'menu.html'")
+            console.log("web <-r- ser 'menu.html'")
             res.render('menu',{contenido, valUsu});            
         }else{
             console.log("nav <-r- server 'falla.html'")
@@ -83,7 +83,12 @@ app.post('/mercaderia',(req, res)=>{
 })
 
 // cu10 nuevo Control
+app.post('/api',(req,res)=>{
+    //console.log(req.body);
 
+    res.send(Seguridad.procesar(req.body));
+ 
+})
 
 
 

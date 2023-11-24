@@ -1,0 +1,18 @@
+SequenceDiagram{
+  lifeline web 
+  lifeline ser as "server"
+  lifeline seg as "seguiridad"
+  lifeline con as "controlador"
+  lifeline mod as "modelo"
+
+    web --> ser 'post/login'
+    ser --> seg 'validarUsuario(data)'
+    seg --> mod 'nomUsuExiste(s_monUsu)'
+    seg <-r- mod 'true'
+    seg --> mod 'obtenerUsuario(nomU)'
+    seg <-r- mod 'Usuario'
+    seg --> mod 'obtenerSegUsuario(nomU)'
+    seg <-r- mod 'SegUsuario'
+    ser <-r- seg '{respuesta}'
+    web <-r- ser 'menu.html'
+}

@@ -1,0 +1,10 @@
+SequenceDiagram{
+  lifeline web 
+  lifeline ser as "server"
+  lifeline seg as "seguiridad"
+  lifeline con as "controlador"
+  lifeline mod as "modelo"
+  lifeline loc as "unidad \n local"
+
+    web --> ser "
+}
