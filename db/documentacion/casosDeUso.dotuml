@@ -1,0 +1,22 @@
+UseCaseDiagram {
+
+actor "Generador" as gen
+note "Implementados \n Pintados" bottom of gen
+system "Checkit" as sys{
+usecase "Login" as cu00 [fillcolor=paleturquoise]
+
+usecase "Nuevo \n Control" as cu10 [fillcolor=paleturquoise]
+usecase "Listar \n Controles" as cu11 [fillcolor=paleturquoise]
+
+gen -- cu00 
+gen -- cu10
+gen -- cu11
+
+usecase "Eliminar \n Control" as cu12
+usecase "Modificar \n Control" as cu13
+
+cu11 -e-> cu12
+cu11 -e-> cu13
+
+}
+}
