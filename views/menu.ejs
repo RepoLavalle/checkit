@@ -45,10 +45,14 @@
         <hr>
 
         <button onclick="cu11_listarControles()">Mis controles</button>
-        <button onclick="cu12_eliminarControles()">Eliminar</button>
-        <button onclick="cu13_modificarControles()">Modificar</button>
+        <!--<button onclick="cu12_eliminarControles()">Eliminar</button> eliminados el 20231205 -->
+        <!--<button onclick="cu13_modificarControles()">Modificar</button> eliminados el 20231205 -->
 
         <div id="cu11_listarControles"></div>
+
+        <button onclick='cu12_actualizarControles()'>Actualizar</button>
+
+        
     </div>
     <script>
 
@@ -104,7 +108,7 @@
                 method: 'POST',
                 body: JSON.stringify(layer1),
                 headers: {'Content-Type' : 'application/json'}
-            })
+            }).then(cu11_listarControles())  // 20231205
 
         }
 
@@ -127,7 +131,25 @@
 
         }
 
-        let matObj = [];
+        function cu12_actualizarControles(){
+            //alert('implementar...')
+            let layer0 = matObj;
+
+            let layer1 = {}
+            layer1.cu = "cu12_actualizarControles"
+            layer1.carga = layer0
+            layer1.usuario = user
+
+            fetch('http://localhost:3000/api',{
+                method: 'POST',
+                body: JSON.stringify(layer1),
+                headers: {'Content-Type' : 'application/json'}
+            })
+
+            
+        }
+
+        let matObj = []; // Global
 
         function listarControles(data){
             //console.log(data);
@@ -135,8 +157,6 @@
             armarDisplay(data.controles)
 
         }
-
- 
 
         function armarDisplay(matObj){
             var display = document.getElementById('cu11_listarControles');
@@ -147,7 +167,9 @@
                 btn += "<label>"+matObj[i].parametro+
                     "<button id='"+strObj+"' onclick='periodicidad(this)'>"+matObj[i].periodicidad+"</button>"+                 
                     "<button id='"+strObj+"' onclick='prorrogable(this)'>"+    matObj[i].prorrogable+"</button>"+
-                    "<button id='"+strObj+"' onclick='reajustable(this)'>"+    matObj[i].reajustable+"</button><br>"
+                    "<button id='"+strObj+"' onclick='reajustable(this)'>"+    matObj[i].reajustable+"</button>"+
+                    "<button id='"+strObj+"' onclick='eliminar(this)'>"+    "Eliminar"+"</button>"+
+                    "<br>"
             }
             display.innerHTML = btn
         }
@@ -156,8 +178,12 @@
             
             var newObj = JSON.parse(data.getAttribute('id'))
 
-            let nuevaPeriodicidad    = prompt('Ingrese nueva edad')
-            newObj.periodicidad =nuevaPeriodicidad                  
+            let nuevaPeriodicidad    = prompt('Ingrese nuevo valor en días:')
+            console.log(nuevaPeriodicidad);
+            if(nuevaPeriodicidad){
+                newObj.periodicidad =nuevaPeriodicidad 
+            }
+                             
 
             remMos(newObj)
         }        
@@ -172,6 +198,23 @@
             
         }
 
+        function reajustable(data){
+            var newObj = JSON.parse(data.getAttribute('id'))
+
+            newObj.reajustable?newObj.reajustable = false : newObj.reajustable = true ;
+
+            remMos(newObj)            
+        }
+
+        function eliminar(data){
+            var newObj = JSON.parse(data.getAttribute('id'))
+
+            var newMatObj = matObj.filter(x=>x.parametro != newObj.parametro)
+
+            matObj = newMatObj
+            armarDisplay(matObj)
+        }
+
         function remMos(newObj){
             for(var i=0 ; i<matObj.length ; i++){
                 if(matObj[i].parametro == newObj.parametro){
@@ -181,9 +224,6 @@
             armarDisplay(matObj)            
         }
 
-        function reajustable(data){
-            alert('corriendo')
-        }
 
     </script>
     

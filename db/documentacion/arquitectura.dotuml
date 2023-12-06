@@ -6,5 +6,5 @@ SequenceDiagram{
   lifeline mod as "modelo"
   lifeline loc as "unidad \n local"
 
-    web --> ser "
+   
 }

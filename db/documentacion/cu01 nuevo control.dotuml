@@ -5,8 +5,18 @@ SequenceDiagram{
   lifeline con as "controlador"
   lifeline mod as "modelo"
 
-  web --> ser "post/api"
-  ser --> seg "procesar(carga)"
-  seg --> con "procesar(layer1)"
-  con --> mod "guardarControl \n (Control)"
+web --> ser 'post/api'
+ser --> seg 'procesar(data)'
+seg --> mod 'obtenerSegUsuario(nomU)'
+seg <-r- mod '{SegUsuario}'
+seg --> con 'procesar(data)'
+
+note right 'cu = nuevoControl'
+con --> mod 'dameUsuarios()'
+con <-r- mod '[{Usuario}]'
+con --> mod 'guardarUsuarios([Usuario])'
+web <-r- ser '[{..}]'
+
+
+
 }

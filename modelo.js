@@ -1,5 +1,6 @@
 const fs = require('fs')
 const Clases = require('./clases.js');
+const Seguridad = require('./seguridad.js');
 
 
 function dameColeccion(col){
@@ -24,6 +25,7 @@ function guardarUsuarios(data){
 }
 
 function dameUsuarios(){
+    
     let A_usuarios = dameColeccion("usuarios");
  
     let B_usuarios = []
@@ -43,15 +45,11 @@ function dameUsuarios(){
         tmp_usuario.controles = B_controles
         B_usuarios.push(tmp_usuario)
     }
- 
+    console.log("<-r- mod '[{Usuario}]'")
     return B_usuarios
 }
 
 //dameUsuarios()
-
-
-
-
 
 //-----------------------------------------------
 function guardarObjeto(obj){
@@ -179,7 +177,7 @@ function obtenerSegUsuario(segU){
     let obj_colObj2 = obj_colObj.filter(x=>x.nomUsu == segU)
 
     if(obj_colObj2.length == 1){
-        console.log("<-r- mod 'SegUsuario'")
+        console.log("<-r- mod '{SegUsuario}'")
         return obj_colObj2[0]
     }else{
         console.log("<-r- modelo '{}'")
@@ -199,12 +197,20 @@ function nomUsuExiste(data){
         obj_colObj = JSON.parse(str_colObj);
     }
 
-    //Filtro por nombre de usuario
+    //Filtro por nombre de usuario y verifico contraseña
     let tmp = obj_colObj.filter(x=>x.nomUsu == data.user && x.pass == data.pass)
 
     //Si la cuenta del fitrado es uno, devuelvo true
     //Si la cuenta del filtrado es distinto de uno devuelvo false
     if(tmp.length == 1){
+        // Actualizo la fecha del token
+        for(var i=0  ; i<obj_colObj.length ; i++){
+            if(obj_colObj[i].nomUsu == data.user){
+                obj_colObj[i].dateToken = new Date();
+            }
+        }
+        //console.log(JSON.stringify(obj_colObj))
+        fs.writeFileSync('./db/seguridad.txt',JSON.stringify(obj_colObj)) 
         console.log("<-r- mod 'true'")
         return true;
     }else{
@@ -214,7 +220,7 @@ function nomUsuExiste(data){
 
 }
 
-function validarUsuario(arg){
+function x_validarUsuario(arg){
     console.log("--> mod 'validarUsuario(arg)'")
     console.log(arg)
 

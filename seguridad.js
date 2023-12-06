@@ -42,6 +42,7 @@ function regUsu(data){
 
 function validarUsuario(data){
     console.log("--> seg 'validarUsuario(data)'")
+    console.log(data)
     // Este mètodo sirve para generar el primer token de usuario de sesión.
     // pregunto si el usuario existe
     let tmp1 = Modelo.nomUsuExiste(data)
@@ -70,14 +71,18 @@ function validarUsuario(data){
 }
 
 function procesar(data){
-    console.log("--> seguridad 'procesar(data)'")
+    console.log("--> seg 'procesar(data)'")
     let segUsu = Modelo.obtenerSegUsuario(data.usuario.nomUsu)
 
     if((ya().getTime() - (new Date(segUsu.dateToken)).getTime()  ) /(1000*60*60*24) < 20){
         console.log("seg --> con 'procesar(data)' ")
         let tmp = Controlador.procesar(data)
-        console.log("<-r- seg 'procesar(data)' ")
-        return tmp
+        
+        if(tmp != undefined){
+            console.log("<-r- seg 'procesar(data)' ")
+            return tmp
+        }
+        
     }else{
         console.log("<-r- seg 'token vencido'");
         return false;
@@ -96,6 +101,6 @@ function ya(){
     return (new Date(new Date().getTime() - 3*60*60*1000));
 }
 
-ya();
+//ya();
 
 module.exports = {regUsu, validarUsuario, procesar, ya};

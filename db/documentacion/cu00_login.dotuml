@@ -8,6 +8,7 @@ SequenceDiagram{
     web --> ser 'post/login'
     ser --> seg 'validarUsuario(data)'
     seg --> mod 'nomUsuExiste(s_monUsu)'
+    note right "valida user, pass \n y setea token"
     seg <-r- mod 'true'
     seg --> mod 'obtenerUsuario(nomU)'
     seg <-r- mod 'Usuario'

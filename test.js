@@ -4,23 +4,6 @@ const Controlador = require('./controlador.js');
 const Seguridad = require('./seguridad.js');
 const fs = require('fs');
 
-function testValidarUsuario(){
-    let testObj ={
-        user: 'Nexo',
-        pass: '1234',
-        cu00: 'Ingresar'
-      }
-    Seguridad.validarUsuario(testObj)
-        let testObj2 ={
-        user: 'Nexo',
-        pass: '12345',
-        cu00: 'Ingresar'
-      }
-    Seguridad.validarUsuario(testObj)
-    Seguridad.validarUsuario(testObj2)
-}
-
-
 
 //  agregarUsuario-----------------------------------
 function testAgregarUsuario(){
@@ -31,8 +14,6 @@ function testAgregarUsuario(){
     Modelo.agregarUsuario(nU);
 }
 
-
-
 //  agregarSegUsuario-------------------------------
 function testAgregarSegUsuario(){
     const oSU = new Clases.SegUsuario();
@@ -42,7 +23,6 @@ function testAgregarSegUsuario(){
     oSU.setDateToken(Seguridad.ya());
     Modelo.agregarSegUsuario(oSU)
 }
-
 
 //  nomUsuExiste------------------------------------
 function testNomUsuExiste(){
@@ -55,27 +35,21 @@ function testNomUsuExiste(){
     //Modelo.eliminarUsuario("vonku");
 }
 
-
 //   obtenerUsuario---------------------------------
 function testObtenerUsuario(){
     console.log(Modelo.obtenerUsuario("vonku"))
 }
-
 
 //  obtenerSegUsuario-------------------------------
 function testObtenerSegUsuario(){
     console.log(Modelo.obtenerSegUsuario("vonku"))
 }
 
-
-
 //   eliminarUsuario---------------------------------
 function testEliminarUsuario(){
     //testAgregarUsuario()
     Modelo.eliminarUsuario("vonku")  
 }
-
-
 
 //   eliminarSegUsuario-----------------------------
 function testEliminarSegUsuario(){
@@ -277,12 +251,11 @@ function testDameUsuarios(){
 
 
 function todosLosTest(){
-    testValidarUsuario();
 
     testAgregarUsuario();
     testAgregarSegUsuario();
     
-    testNomUsuExiste();
+     testNomUsuExiste();
     testObtenerUsuario();
     testObtenerSegUsuario();
 

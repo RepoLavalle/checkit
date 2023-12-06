@@ -40,11 +40,12 @@ app.post('/login',(req, res)=>{
     console.log(" web --> ser 'post/login'");
     //console.log(JSON.stringify(req.body));
     if(req.body.cu00 == "Nuevo"){
-        console.log("<-- registro--[server]")
+        console.log("web <-r- ser 'registro'")
         res.render('registro',{});  
     }
     if(req.body.cu00 == "Ingresar"){
         let valUsu = Seguridad.validarUsuario(req.body)
+        console.log("ser --> seg 'validarUsuario(req.body)'")
 
         if(valUsu.validar){
             let contenido = JSON.stringify(valUsu.carga)
@@ -60,18 +61,21 @@ app.post('/login',(req, res)=>{
 });
 
 app.post('/registro', (req, res) => {
-    console.log("-- post / registro -->[server]")
-    let rta = Seguridad.regUsu(req.body);
 
+    console.log("web --> ser 'post/registro'")
+    let rta = Seguridad.regUsu(req.body);
+    console.log("web <-r- ser 'exito/falla'")
     rta ? res.render('exito',{}) : res.render('falla',{});
 });
 
 
 app.post('/menu', (req, res) => {
+    console.log("web --> ser 'post/menu'")
     const nombre = new Date(); // Puedes pasar datos dinámicos a la vista
     // creo un objeto
     //res.render('index', { nombre: nombre, comida: plato });
     //res.send("<h1>Checkit free.... ! </p>");
+    console.log("web <-r- ser 'menu.html'")
     res.render('menu',{});
 });
 
@@ -84,10 +88,10 @@ app.post('/mercaderia',(req, res)=>{
 
 // cu10 nuevo Control
 app.post('/api',(req,res)=>{
-    //console.log(req.body);
-
+    
+    console.log("web --> ser 'post/api'")
     res.send(Seguridad.procesar(req.body));
- 
+    console.log("web <-r- ser '[{..}]'")
 })
 
 

@@ -4,20 +4,19 @@ const Controlador = require('./controlador.js');
 const Seguridad = require('./seguridad.js');
 
 function procesar(data){
-    console.log("-->[controlador] 'procesar(data)'")
-    console.log(data);
+    console.log("--> con 'procesar(data)'")
+    //console.log(data);
 
     // si caso de uso es nuevoControl
     if(data.cu == "nuevoControl"){
-
+        console.log("note right 'cu = nuevoControl'")
         // Obtengo todos los usuarios
+
+        console.log("con --> mod 'dameUsuarios()'")        
         let colUsuario = Modelo.dameUsuarios();
-        console.log(colUsuario);
 
         //Convierto el control de la carga en objeto
         let conNuevo = Clases.Control.fromJSON(data.carga)
-        console.log("conNuevo")
-        console.log(conNuevo)
 
         //convierto la fecha desde en objeto date (fecha)
         let desde = new Date(data.carga.desde)
@@ -25,10 +24,7 @@ function procesar(data){
         // console.log(desde)
 
         // calculo desde menos la periodicidad
-        console.log( new Date(desde.getTime() - parseInt(data.carga.periodicidad) * 1000 * 60 * 60 * 24) )
         conNuevo.ultimaVer = new Date(desde.getTime() - parseInt(data.carga.periodicidad) * 1000 * 60 * 60 * 24)
-
-        console.log(conNuevo)
 
         // Recorro la colección de usuarios para agregar el nuevo control
         for(var i=0 ; i<colUsuario.length ;  i++){
@@ -36,20 +32,45 @@ function procesar(data){
                 colUsuario[i].agregarControl(conNuevo)
             }
         }
-
-        console.log(" (con control agregado)")
-        console.log(colUsuario)
-
+        console.log("con --> mod 'guardarUsuarios([Usuario])'")
         Modelo.guardarUsuarios(colUsuario);
     }
 
     if(data.cu == "cu11_listarControles"){
-        console.log("con --> con 'cu11_listarControles")
+        console.log("note right 'cu11_listarControles")
         let colUsu = Modelo.dameUsuarios()
         let filColUsu = colUsu.filter(x=>x.nomUsu == data.usuario.nomUsu)
-        console.log(filColUsu)
+        //console.log(filColUsu)
         return filColUsu
     }
+
+    if(data.cu == "cu12_actualizarControles"){
+        console.log("note right 'cu12_actualizarControles'")
+        //console.log(data.carga);
+
+        //Convierto los controles en Objetos Control
+        let newCon = []
+        for(var i=0 ; i< data.carga.length ; i++){
+            newCon.push(Clases.Control.fromJSON(data.carga[i]))
+        }
+        //console.log(newCon)
+
+        //Obtengo los usuarios para agregarle
+        console.log(Modelo.dameUsuarios());
+        let colUsu = Modelo.dameUsuarios();
+        for(var i=0 ; i<colUsu.length ; i++){
+            if(colUsu[i].nomUsu == data.usuario.nomUsu){
+                //console.log("encontre coincidencia")
+                colUsu[i].controles = newCon
+            }
+        }
+        console.log("con --> mod 'guardarUsuarios([Usuario])'")
+
+        Modelo.guardarUsuarios(colUsu);
+
+    }
+
+
 }
 
 
