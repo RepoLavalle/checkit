@@ -87,8 +87,30 @@ class SegUsuario{
     getPass(){
         return this.pass
     }
+
+    static documentar(){
+        let str = ""
+        str += "class segUsuario {\n"+
+        "this.nomUsu : string \n " +
+        "this.pass : string \n " +
+        "this.token : string \n " +
+        "this.dateToken : date \n " +
+
+        "setDateToken(dat):void \n " +
+        "getDateToken(): date \n " +
+        "setToken(tk)  :void \n " +
+        "getToken(): string \n " +
+        "setNomUsu(usu):void \n " +
+        "getNomUsu(): string \n " +
+        "setPass(pas)  :void \n " +
+        "getPass():string \n " +
+        "}"
+        return str;
+    }
        
 }
+
+//console.log(SegUsuario.documentar())
 
 class TokUsu{
     constructor(usu, segUsu){

@@ -1,4 +1,4 @@
-SequenceDiagram{
+SequenceDiagram [frame=true framecolor=steelblue label='cu Nuevo Control']{
   lifeline web 
   lifeline ser as "server"
   lifeline seg as "seguiridad"

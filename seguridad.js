@@ -101,6 +101,10 @@ function ya(){
     return (new Date(new Date().getTime() - 3*60*60*1000));
 }
 
-//ya();
+function testYa(){
+    console.log(ya());
+}
+
+testYa();
 
 module.exports = {regUsu, validarUsuario, procesar, ya};

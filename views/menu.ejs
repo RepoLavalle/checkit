@@ -52,6 +52,10 @@
 
         <button onclick='cu12_actualizarControles()'>Actualizar</button>
 
+        <hr>
+        <button onclick="cu13_listarVerificadores()">Mis Verificadores</button>
+        <div id="cu13_listarVerificadores"></div>
+
         
     </div>
     <script>
@@ -131,6 +135,8 @@
 
         }
 
+        // cu12 ---------------------------
+
         function cu12_actualizarControles(){
             //alert('implementar...')
             let layer0 = matObj;
@@ -158,13 +164,18 @@
 
         }
 
+        let marCon = [];
+
         function armarDisplay(matObj){
             var display = document.getElementById('cu11_listarControles');
             // construyo los botones a partir del vector
             var btn = ""
+            var str1 =""
             for(var i=0 ; i<matObj.length ; i++){
                 var strObj = JSON.stringify(matObj[i]);
-                btn += "<label>"+matObj[i].parametro+
+                marCon[i]==true?str1="X":str1="&nbsp;"
+                btn += "<button id='"+strObj+"' onclick='seleccionar(this)'>"+str1+"</button>&nbsp;"+ 
+                    "<label>"+matObj[i].parametro+
                     "<button id='"+strObj+"' onclick='periodicidad(this)'>"+matObj[i].periodicidad+"</button>"+                 
                     "<button id='"+strObj+"' onclick='prorrogable(this)'>"+    matObj[i].prorrogable+"</button>"+
                     "<button id='"+strObj+"' onclick='reajustable(this)'>"+    matObj[i].reajustable+"</button>"+
@@ -172,6 +183,18 @@
                     "<br>"
             }
             display.innerHTML = btn
+        }
+
+        function seleccionar(data){
+            console.log(JSON.parse(data.getAttribute('id')));
+            let objSel = JSON.parse(data.getAttribute('id'));
+            for(var i=0 ; i<matObj.length ; i++){
+                if(matObj[i].parametro == objSel.parametro){
+                    marCon[i] == true?marCon[i]=null:marCon[i]=true;
+                }
+            }
+            console.log(marCon);
+            armarDisplay(matObj)
         }
 
         function periodicidad(data){
@@ -224,6 +247,71 @@
             armarDisplay(matObj)            
         }
 
+        // cu13 ---------------------------
+
+
+        function cu13_listarVerificadores(){
+
+            let layer0 = {}
+
+            let layer1 = {}
+            layer1.cu = "cu13_listarVerificadores"
+            layer1.carga = layer0
+            layer1.usuario = user
+
+            fetch('http://localhost:3000/api',{
+                method: 'POST',
+                body: JSON.stringify(layer1),
+                headers: {'Content-Type' : 'application/json'}
+            })
+            .then(data=>data.json())
+            //.then(data=>console.log(data))
+            .then(data=>listarVerificadores(data))
+        }
+
+        let matVer = []  // Global
+        let matMar = []  // Verificadores seleccionados.
+        
+        function listarVerificadores(data){
+            let disVer = document.getElementById('cu13_listarVerificadores')
+            disVer.innerHTML = "hola"
+            matVer = data;
+ 
+            let str  = "";
+            let str2 = "";
+            let str3 = "";
+            
+            for(var i=0 ; i<data.length ; i++){
+                matMar[i]== null ? str3 = "&nbsp;" : str3 = "X";
+                str2 = JSON.stringify(data[i])
+                str += "<p><button onclick='selVer(this)' "+
+                    "id='"+str2+"'"+
+                    ">"+str3+"</button>&nbsp;" + data[i].nombre + "</p>"
+            }
+
+            disVer.innerHTML = str;
+        }
+
+        function selVer(data){
+
+            // Obtengo el objeto
+            let eveObj = JSON.parse(data.getAttribute('id'));
+
+            // Recorro el vector de objetos para ver cuál es el seleccionado
+            let i=-1
+            do{
+                i += 1;    
+            } while(matVer[i].nomUsu != eveObj.nomUsu);
+
+            //console.log(i)
+
+            // cambio el estado de marca
+            matMar[i]==null?matMar[i]=true:matMar[i]=null;
+            
+            console.log(matMar);
+            listarVerificadores(matVer)
+
+        }
 
     </script>
     

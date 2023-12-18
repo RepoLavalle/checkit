@@ -45,6 +45,7 @@ function dameUsuarios(){
         tmp_usuario.controles = B_controles
         B_usuarios.push(tmp_usuario)
     }
+
     console.log("<-r- mod '[{Usuario}]'")
     return B_usuarios
 }
@@ -206,7 +207,8 @@ function nomUsuExiste(data){
         // Actualizo la fecha del token
         for(var i=0  ; i<obj_colObj.length ; i++){
             if(obj_colObj[i].nomUsu == data.user){
-                obj_colObj[i].dateToken = new Date();
+                //obj_colObj[i].dateToken = new Date();
+                obj_colObj[i].dateToken = new Date(new Date().getTime() - 3*60*60*1000);
             }
         }
         //console.log(JSON.stringify(obj_colObj))

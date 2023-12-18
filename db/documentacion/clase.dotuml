@@ -1,21 +1,57 @@
 
 ClassDiagram [frame=true framecolor=steelblue label="Class Diagram"] {
- class Control {
+
+class Control {
   parametro: string
   periodicidad: int
   prorrogable: boolean
-	reajustable: boolean
+  reajustable: boolean
   ultimaVer: date
- }
+}
   
-
-	
-  class Usuario{
-    nombre : string
-    this.apellido;
-    this.nomUsu;
+class Control{
     
-   }
+    this.parametro: string
+    this.periodicidad : int
+    this.prorrogable : boolean
+    this.reajustable : boolean
+    this.ultimaVer : date
+
+    static fromJSON(json):Control
+    setUltimaVer(dat):void
+    getUltimaVer():date
+    suscribir(lis):void
+    setReajustable(re):void
+    getReajustable():boolean
+    setProrrogable(pro):void
+    getProrrogable():boolean
+    setPeriodicidad(per):void
+    getPeriodicidad():int
+    setParametro(par):void
+    getParametro(): string
+}
+	
+class Usuario{
+  nombre : string
+  this.apellido;
+  this.nomUsu;
+  
+}
+
+class segUsuario {
+  this.nomUsu : string 
+  this.pass : string 
+  this.token : string 
+  this.dateToken : date 
+  setDateToken(dat):void 
+  getDateToken(): date 
+  setToken(tk)  :void 
+  getToken(): string 
+  setNomUsu(usu):void 
+  getNomUsu(): string 
+  setPass(pas)  :void 
+  getPass():string 
+}
   
   
 

@@ -12,9 +12,11 @@ note "Implementados \n Pintados" bottom of gen
         gen -- cu10
         gen -- cu11
 
-        usecase "actualizar\nControles\ncu12" as cu12
+        usecase "actualizar\nControles\ncu12" as cu12 [fillcolor=paleturquoise]
         
         cu11 -e-> cu12
-        
+
+        usecase "Listar \n Verificadores" as cu13
+        gen -- cu13
     }
 }

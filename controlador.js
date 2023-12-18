@@ -70,6 +70,17 @@ function procesar(data){
 
     }
 
+    if(data.cu == "cu13_listarVerificadores"){
+        // Pido al modelo todos los usuarios
+        let colUsu = Modelo.dameUsuarios()
+        // Elimino todos los controles del atributo Controles
+        colUsu.forEach(x=>x.controles = [])
+        //Devuelvo resto
+
+        console.log("<-r- con '[{Usuario}]'")
+        return colUsu
+    }
+
 
 }
 
