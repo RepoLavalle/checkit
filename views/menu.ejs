@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
     <h1>Sistema Checklist</h1>
@@ -16,47 +17,185 @@
     <button onclick="volver()">Salir</button>
     <div id="cu10">
         <hr>
-        <h2>Nuevo Control</h2>
-        <p>
-        <label for="parametro">Parámetro:&nbsp;</label>
-        <input type="text" name="parametro" id="parametro">
-        </p>
-        <p>
-        <label for="periodicidad">Periodicidad:&nbsp;</label>
-        <input type="number" name="periodicidad" id="periodicidad">
-        </p>
-        <p>
-        <label>Prorrogable:</label>
-        <input type="radio" id="radio11" name="prorrogable" value="si">
-        <label for="radio1">Sí</label>
-        <input type="radio" id="radio12" name="prorrogable" value="no">
-        <label for="radio2">No</label>
-        </p>
-        <p>
-        <label>Reajustable:</label>
-        <input type="radio" id="radio21" name="reajustable" value="si">
-        <label for="radio1">Sí</label>
-        <input type="radio" id="radio22" name="reajustable" value="no">
-        <label for="radio2">No</label>
-        </p>
-        <p><label>A partir de:&nbsp;</label><input type="date"  id="desde" name="desde"></p>
 
-        <button onclick="cu10_nuevoControl()">Agregar</button>
+        <button id="colapsarNuevoControl" onclick="colapsarNuevoControl()">Nuevo Control</button>
+        <div id="nuevoControl">
+            <p>
+            <label for="parametro">Parámetro:&nbsp;</label>
+            <input type="text" name="parametro" id="parametro">
+            </p>
+            <p>
+            <label for="periodicidad">Periodicidad:&nbsp;</label>
+            <input type="number" name="periodicidad" id="periodicidad">
+            </p>
+            <p>
+            <label>Prorrogable:</label>
+            <input type="radio" id="radio11" name="prorrogable" value="si">
+            <label for="radio1">Sí</label>
+            <input type="radio" id="radio12" name="prorrogable" value="no">
+            <label for="radio2">No</label>
+            </p>
+            <p>
+            <label>Reajustable:</label>
+            <input type="radio" id="radio21" name="reajustable" value="si">
+            <label for="radio1">Sí</label>
+            <input type="radio" id="radio22" name="reajustable" value="no">
+            <label for="radio2">No</label>
+            </p>
+            <p><label>A partir de:&nbsp;</label><input type="date"  id="desde" name="desde"></p>
+
+            <button onclick="cu10_nuevoControl()">Agregar</button>
+        </div>
+        <script>
+            const divParCer = []; //Global cerrar todos los divs
+            const miDiv = document.getElementById('nuevoControl');
+
+            divParCer.push(miDiv);
+            miDiv.style.display = 'none';
+
+            function colapsarNuevoControl(){
+                cerrarDivs();
+                if (miDiv.style.display === 'none') {
+                    miDiv.style.display = 'block'; // Cambia a 'block' para mostrar el contenido
+                } else {
+                    miDiv.style.display = 'none'; // Cambia a 'none' para ocultar el contenido
+                }
+                
+            }
+        </script>
+
         <hr>
 
-        <button onclick="cu11_listarControles()">Mis controles</button>
-        <!--<button onclick="cu12_eliminarControles()">Eliminar</button> eliminados el 20231205 -->
-        <!--<button onclick="cu13_modificarControles()">Modificar</button> eliminados el 20231205 -->
+        <button onclick="activarListarControles()">Mis controles</button>
 
         <div id="cu11_listarControles"></div>
 
-        <button onclick='cu12_actualizarControles()'>Actualizar</button>
+        <script>
+            
+            const divLisCon = document.getElementById('cu11_listarControles');
+            divLisCon.style.display = 'none';
+
+            divParCer.push(divLisCon);
+
+            function activarListarControles(){
+                cerrarDivs();
+                if(divLisCon.style.display === 'none'){
+                    divLisCon.style.display = 'block'; // Cambia a 'block' para mostrar el contenido
+                    cu11_listarControles()
+                } else {
+                    divLisCon.style.display = 'none'; // Cambia a 'none' para ocultar el contenido    
+                }
+            }
+        </script>
+
+        <!-- button onclick='cu12_actualizarControles()'>Actualizar</button -->
 
         <hr>
-        <button onclick="cu13_listarVerificadores()">Mis Verificadores</button>
+        <button onclick="activarListarVerificadores()">Mis Verificadores</button>
         <div id="cu13_listarVerificadores"></div>
 
-        
+        <script>
+            const divLisVer = document.getElementById('cu13_listarVerificadores');
+            divLisVer.style.display = 'none';
+
+            divParCer.push(divLisVer);
+
+            function activarListarVerificadores(){
+                cerrarDivs();
+                if(divLisVer.style.display === 'none'){
+                    divLisVer.style.display = 'block';
+                    cu13_listarVerificadores();
+                }else{
+                    divLisVer.style.display = 'none'
+                }
+            }
+        </script>
+
+        <hr><!-- cu14 -->
+        <button onclick='activarNuevaLista()'>Nueva Lista</button>
+        <div id="divNuevaLista">
+            <p><label>Nombre de Mi Nueva Lista: &nbsp;</label><input type="text" id="cu14_input"></p>
+            <button onclick="cu14_nuevaLista()">Crear</button>
+        </div>
+        <script>
+            const divNueLis = document.getElementById('divNuevaLista');
+            divNueLis.style.display = 'none';
+            
+            divParCer.push(divNueLis);
+
+            function activarNuevaLista(){
+                cerrarDivs();
+                // if(divNueLis.style.display === 'none'){
+                    divNueLis.style.display = 'block';
+                    divLisVer.style.display = 'block';
+                    divLisCon.style.display = 'block';
+                // }else{
+                //     divNueLis.style.display = 'none';
+                // }
+            }
+        </script>
+
+        <hr><!-- cu16 -->
+
+        <p><button onclick="activarMostrarListas()">Mis Listas:</button></button></p>
+        <div id="cu15_listarListas"></div>
+
+        <script>
+            const divMosMis = document.getElementById('cu15_listarListas');
+            divMosMis.style.display = 'none';
+
+            divParCer.push(divMosMis);
+            
+            function activarMostrarListas(){
+                cerrarDivs();
+                if(divMosMis.style.display === 'none'){
+                    divMosMis.style.display = 'block';
+                    cu15_listarListas()
+                }else{
+                    divMosMis.style.display = 'none';
+                }
+            }
+
+        </script>
+
+        <dialog>
+            <p>Este es el contenido de la ventana modal.</p>
+            <div id="modal"></div>
+            <button onclick="document.querySelector('dialog').close()">Close</button>
+        </dialog>
+          
+        <!--button onclick="document.querySelector('dialog').showModal()">Open</button-->
+
+        <hr>
+        <button onclick='activarVerificar()'>Listas para Verificar</button>
+        <div id="cu17_listasVerificar">xxx</div>
+
+        <script>
+            const divVerVer = document.getElementById('cu17_listasVerificar');
+            divVerVer.style.display == 'none';
+
+            divParCer.push(divVerVer);
+
+            function activarVerificar(){
+                cerrarDivs();
+                if(divVerVer.style.display === 'none'){
+                    divVerVer.style.display = 'block';
+                    cu17_listasVerificar();
+                }else{
+                    divVerVer.style.display = 'none';
+                }
+            }
+        </script>
+
+        <!-- Cierra todos div's que no se ocupan -->
+        <script>
+            function cerrarDivs(){
+                for(var i=0 ; i<divParCer.length ; i++){
+                    divParCer[i].style.display = 'none'
+                }
+            }
+        </script>
+          
     </div>
     <script>
 
@@ -117,21 +256,29 @@
         }
 
         function cu11_listarControles(){
-            //alert('running listar controles...')
-            let layer0 = {}
+           
+            // let listaControles = document.getElementById('cu11_listarControles').innerHTML == '';
+            // console.log(listaControles);
+            // if(listaControles){
+                
+                let layer0 = {}
 
-            let layer1 = {}
-            layer1.cu = "cu11_listarControles"
-            layer1.carga = layer0
-            layer1.usuario = user
+                let layer1 = {}
+                layer1.cu = "cu11_listarControles"
+                layer1.carga = layer0
+                layer1.usuario = user
 
-            fetch('http://localhost:3000/api',{
-                method: 'POST',
-                body: JSON.stringify(layer1),
-                headers: {'Content-Type' : 'application/json'}
-            })
-            .then(data=>data.json())
-            .then(data=>listarControles(data[0]))
+                fetch('http://localhost:3000/api',{
+                    method: 'POST',
+                    body: JSON.stringify(layer1),
+                    headers: {'Content-Type' : 'application/json'}
+                })
+                .then(data=>data.json())
+                .then(data=>listarControles(data[0]))
+            // }else{
+            //     console.log("running else....")
+            //     document.getElementById('cu11_listarControles').value == "";
+            // }
 
         }
 
@@ -181,12 +328,15 @@
                     "<button id='"+strObj+"' onclick='reajustable(this)'>"+    matObj[i].reajustable+"</button>"+
                     "<button id='"+strObj+"' onclick='eliminar(this)'>"+    "Eliminar"+"</button>"+
                     "<br>"
+                    
+
             }
+            btn += "<button onclick='cu12_actualizarControles()'>Actualizar</button>";
             display.innerHTML = btn
         }
 
         function seleccionar(data){
-            console.log(JSON.parse(data.getAttribute('id')));
+            //console.log(JSON.parse(data.getAttribute('id')));
             let objSel = JSON.parse(data.getAttribute('id'));
             for(var i=0 ; i<matObj.length ; i++){
                 if(matObj[i].parametro == objSel.parametro){
@@ -312,7 +462,203 @@
             listarVerificadores(matVer)
 
         }
+        
+        // cu14 Nueva Lista
 
+        function cu14_nuevaLista(){
+            console.log("cu14 Nueva Lista")
+            console.log(matVer)
+            console.log(matMar)
+            console.log(matObj)
+            console.log(marCon)
+
+
+           // Colectar los usuarios seleccionados            
+            let lisVer = []//Objeto Lista - atributo Verificadores
+            for(var i=0 ; i<matMar.length ; i++){
+                matMar[i]?lisVer.push(matVer[i]):null;
+            }
+            console.log("lisVer")
+            console.log(lisVer)
+
+            // Colectar los controles seleccionados
+            let lisCon = []
+            for(var i=0 ; i<matObj.length ; i++){
+                marCon[i]?lisCon.push(matObj[i]):null;
+            }
+            console.log("lisCon")
+            console.log(lisCon)
+
+            // crear un objeto js con los datos recopilados del formulario
+            let lis = {}
+            lis.autor = user
+            lis.nombre = document.getElementById('cu14_input').value;
+            lis.controles =     lisCon;
+            lis.observadores =  [];
+            lis.verificadores=  lisVer;
+            console.log(lis)
+
+            // Creo el paquete
+            let layer0 = lis
+
+            let layer1 = {}
+            layer1.cu = "cu14_nuevaLista"
+            layer1.carga = layer0
+            layer1.usuario = user
+
+            fetch('http://localhost:3000/api',{
+                method: 'POST',
+                body: JSON.stringify(layer1),
+                headers: {'Content-Type' : 'application/json'}
+            })
+
+        }
+
+        // cu15 Listar Listas
+        
+        let estLisDes = false // Gloabal: El estado de las listas desplegadas
+
+        function cu15_listarListas(){
+            // estLisDes = document.getElementById('cu15_listarListas').innerHTML == '';
+            // if(estLisDes){
+                let layer0 = {}
+
+                let layer1 = {}
+                layer1.cu = "cu15_listarListas"
+                layer1.carga = layer0
+                layer1.usuario = user
+
+                fetch('http://localhost:3000/api',{
+                    method: 'POST',
+                    body: JSON.stringify(layer1),
+                    headers: {'Content-Type' : 'application/json'}
+                })
+                .then(data=>data.json())
+                //.then(data=>console.log(data))
+                .then(data=>listarListas(data))
+            // }else{
+            //     document.getElementById('cu15_listarListas').innerHTML = '';
+            // }
+        }
+
+        let lisLis = []  // Global
+        let lisMar = []  // Verificadores seleccionados.            
+        
+
+        function listarListas(data){
+            //cu15
+            console.log("Listas de Control: --------------------")
+            let str = "";
+            for(var i=0 ; i<data.length ; i++){
+                let str2 = JSON.stringify(data[i]);
+                console.log("\n"+data[i].nombre)
+                str += "<p><button id='"+str2+"' onclick='modificarLista(this)'>&nbsp;&nbsp;</button>&nbsp;<b>"+data[i].nombre+"</b></p>"
+
+                console.log("Verificadores:")
+                str += "<p><u>Verificadores:</u></p>"
+                str += "<ul>"
+                for(var j=0 ; j<data[i].verificadores.length ; j++){
+                    console.log("  "+data[i].verificadores[j].nombre)
+                    str += "<li>  "+data[i].verificadores[j].nombre+"</li>"
+                }
+                str += "</ul>"
+
+
+                console.log("Controles:")
+                str += "<p><u>Controles:</u></p>";
+
+                str += "<ul>"
+                for(var j=0 ; j<data[i].controles.length ; j++){
+                    console.log("  "+data[i].controles[j].parametro)
+                    str += "<li>  "+data[i].controles[j].parametro+"</li>"
+                }
+                str += "</ul>"
+            }
+            document.getElementById('cu15_listarListas').innerHTML = str;
+        }
+        
+        // cu16 
+        function modificarLista(arg1){
+            var lis = JSON.parse(arg1.getAttribute('id'))
+            console.log(lis);
+            let modal = document.getElementById('modal');
+
+            var str = "---- "+lis.nombre+" ----\n"
+            str +="\n";
+            for(var i=0 ; i<matVer.length ; i++){
+                str += "   "+matVer[i].nombre+"\n"
+            }
+            str +="\n";
+            for(var i=0 ; i<matObj.length ; i++){
+                str += matObj[i].parametro+"\n"
+            }
+
+            modal.innerText = str;
+            document.querySelector('dialog').showModal()
+        }
+    
+        function cu17_listasVerificar(){
+            // if(document.getElementById('cu17_listasVerificar').innerHTML == ""){
+                console.log("cu17");
+                // <div id="cu17_listasVerificar"></div>xxx
+                let layer0 = {}
+
+                let layer1 = {}
+                layer1.cu = "cu17_listasVerificar"
+                layer1.carga = layer0
+                layer1.usuario = user
+
+                fetch('http://localhost:3000/api',{
+                    method: 'POST',
+                    body: JSON.stringify(layer1),
+                    headers: {'Content-Type' : 'application/json'}
+                })
+                .then(data=>data.json())
+                .then(data=>mostrarVerificar(data))
+                //.then(data=>listarListas(data))
+
+            // }else{
+            //     document.getElementById('cu17_listasVerificar').innerHTML = "";
+            // }
+        }
+
+        function mostrarVerificar(data){
+            console.log(data);
+
+
+                let str ="";
+                for(var i=0 ; i<data.length ; i++){
+                
+                    console.log(data[i]);
+                    //console.log("Nombre de la Lista: "+data[i].nombre)
+                    str += "<hr><p>Nombre de la Lista: <b>"+data[i].nombre+ "</b></p>";
+
+                    //console.log("Lista solicitada por: "+data[i].autor.nombre);
+                    str += "<p><b>Lista solicitada por: </b>"+data[i].autor.nombre + "</p>";
+
+                    console.log("Verificadores: ")
+                    
+                    let str2 = ""
+                    for(var j=0 ; j<data[i].verificadores.length ; j++ ){
+                        //console.log(data[i].verificadores[j].nombre)
+                        str2 += " "+data[i].verificadores[j].nombre
+                    }
+                    str += "</p><b>Verificadores:</b>"+str2+" </p>"
+
+                    //console.log("Lista de parámetros: ")
+                    str +="<p>Lista de parámetros:&nbsp;</p>"
+                    str2 = "";
+                    for(var j=0 ; j<data[i].controles.length ; j++){
+                        console.log(data[i].controles[j].parametro)
+                        str2 +="<li><input type='checkbox'>"+data[i].controles[j].parametro+"</li>"
+                    }
+                    str += "<ul>"+str2+"</ul>"
+                }
+        
+                document.getElementById('cu17_listasVerificar').innerHTML = str;
+
+        }
+    
     </script>
     
     

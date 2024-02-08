@@ -4,8 +4,9 @@ SequenceDiagram{
   lifeline seg as "seguiridad"
   lifeline con as "controlador"
   lifeline mod as "modelo"
+  lifeline loc as "unidad \n local"
 
- web --> ser 'post/login'
+    web --> ser 'post/login'
 ser --> seg 'validarUsuario(req.body)'
 seg --> mod 'nomUsuExiste(data)'
 seg <-r- mod 'true'

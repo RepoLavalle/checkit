@@ -3,20 +3,28 @@ UseCaseDiagram {
 actor "Generador" as gen
 note "Implementados \n Pintados" bottom of gen
     system "Checkit" as sys{
-        usecase "Login" as cu00 [fillcolor=paleturquoise]
 
-        usecase "Nuevo \n Control"    as cu10 [fillcolor=paleturquoise]
-        usecase "Listar \n Controles" as cu11 [fillcolor=paleturquoise]
+        usecase "Login 00"                          as cu00 [fillcolor=paleturquoise]
+        usecase "Nuevo \n Control \n cu10"          as cu10 [fillcolor=paleturquoise]
+        usecase "Listar \n Controles \n cu11"       as cu11 [fillcolor=paleturquoise]
+        usecase "actualizar\nControles\n cu12"      as cu12 [fillcolor=paleturquoise]        
+        usecase "Listar \n Verificadores \n cu13"   as cu13 [fillcolor=paleturquoise]
+        usecase "Nueva \n Lista\n cu14"             as cu14 [fillcolor=paleturquoise]
+        usecase "Listar \n Listas \n cu15"          as cu15 [fillcolor=paleturquoise]
+        usecase "Modificar \n Listas \n 16"         as cu16
+        usecase "listasVerificar \n cu17"           as cu17
 
         gen -- cu00 
         gen -- cu10
         gen -- cu11
-
-        usecase "actualizar\nControles\ncu12" as cu12 [fillcolor=paleturquoise]
-        
         cu11 -e-> cu12
-
-        usecase "Listar \n Verificadores" as cu13
         gen -- cu13
+        cu11 -e-> cu14
+        cu13 -e-> cu14
+        gen -- cu15
+        cu15 -e-> cu16
+        gen -- cu17
+
+
     }
 }

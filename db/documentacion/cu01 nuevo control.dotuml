@@ -6,17 +6,23 @@ SequenceDiagram [frame=true framecolor=steelblue label='cu Nuevo Control']{
   lifeline mod as "modelo"
 
 web --> ser 'post/api'
-ser --> seg 'procesar(data)'
-seg --> mod 'obtenerSegUsuario(nomU)'
-seg <-r- mod '{SegUsuario}'
+ser --> seg 'procesar(req.body)'
+seg --> mod 'obtenerSegUsuario(data.usuario.nomUsu)'
+seg <-r- mod '(data.usuario.nomUsu)'
 seg --> con 'procesar(data)'
-
 note right 'cu = nuevoControl'
 con --> mod 'dameUsuarios()'
-con <-r- mod '[{Usuario}]'
 con --> mod 'guardarUsuarios([Usuario])'
+ser <-r- seg '[{..}]'
 web <-r- ser '[{..}]'
-
-
+web --> ser 'post/api'
+ser --> seg 'procesar(req.body)'
+seg --> mod 'obtenerSegUsuario(data.usuario.nomUsu)'
+seg <-r- mod '(data.usuario.nomUsu)'
+seg --> con 'procesar(data)'
+note right 'cu11_listarControles'
+seg <-r- con
+ser <-r- seg '[{..}]'
+web <-r- ser '[{..}]'
 
 }

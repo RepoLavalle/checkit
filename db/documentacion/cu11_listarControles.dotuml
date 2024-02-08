@@ -5,12 +5,18 @@ SequenceDiagram  [frame=true framecolor=steelblue label="cu11_listarControles"]{
   lifeline con as "controlador"
   lifeline mod as "modelo"
 
-  web --> ser "post/api"
-  ser --> seg "procesar(carga)"
-  seg --> con "procesar(carga)"
-  con --> mod "dameUsuarios()"
-  con <-r- mod "[Usuario]"
-  seg <-r- con "[Usuario]"
-  ser <-r- seg "[Usuario]"
-  web <-r- ser "[Usuario]"
+web --> ser 'post/api'
+ser --> seg 'procesar(req.body)'
+seg --> mod 'obtenerSegUsuario(data.usuario.nomUsu)'
+seg <-r- mod '(data.usuario.nomUsu)'
+seg --> con 'procesar(data)'
+note right 'cu11_listarControles'
+con --> mod 'dameUsuarios()'
+con <-r- mod '[{Usuario}]'
+note left 'Colección de Usuarios'
+con --> con 'filtrado por \n nomUsu'
+seg <-r- con
+ser <-r- seg '[{..}]'
+web <-r- ser '[{..}]'
+
 }

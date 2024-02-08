@@ -4,20 +4,52 @@ const Seguridad = require('./seguridad.js');
 
 
 function dameColeccion(col){
-    if(col = "usuarios"){
+    if(col == "usuarios"){
        let txt_col = fs.readFileSync('./db/usuarios.txt','utf-8')
-
        let obj_col = JSON.parse(txt_col)
-
        return obj_col
     }
+
+    if(col == "listas"){
+        let txt_col = fs.readFileSync("./db/listas.txt", 'utf-8')
+ 
+        let obj_col = []
+        if(txt_col){
+            obj_col = JSON.parse(txt_col);
+        }
+ 
+        return obj_col
+    }
+
     return null;    
 }
 
 function guardarColeccion(col, data){
-    if(col = "usuarios"){
+    if(col == "usuarios"){
         fs.writeFileSync('./db/usuarios.txt',JSON.stringify(data))
     }
+    if(col == "listas"){
+        fs.writeFileSync("./db/listas.txt",JSON.stringify(data))
+    }
+}
+
+function guardarListas(data){
+    guardarColeccion("listas",data)
+}
+
+function dameListas(){
+    // Obtengo las listas de la unidad o de la base de datos
+    let obj_js_listas  = dameColeccion("listas")
+
+    //convierto en objetos Lista
+    let obj_lis_listas = []
+    if(obj_js_listas.length > 0){
+        for(var i=0 ; i<obj_js_listas.length ; i++){
+            obj_lis_listas.push(Clases.Lista.fromJSON(obj_js_listas[i]))
+        }
+    }
+    //Entrego la colección
+    return obj_lis_listas
 }
 
 function guardarUsuarios(data){
@@ -46,7 +78,6 @@ function dameUsuarios(){
         B_usuarios.push(tmp_usuario)
     }
 
-    console.log("<-r- mod '[{Usuario}]'")
     return B_usuarios
 }
 
@@ -139,37 +170,29 @@ function eliminarSegUsuario(s_nomUsu){
  * return Usuario 
  */
 function obtenerUsuario(nomU){
-     
-    console.log("--> mod 'obtenerUsuario(nomU)'")
-    /* console.log("<-- No Implementado !!! --[modelo]")
-    const rU = new Clases.Usuario();
-    rU.setNombre("testNombre")
-    rU.setApellido("testApellido")
-    rU.setNomUsu("vonku")*/
-
+ 
     let str_colObj = fs.readFileSync('./db/usuarios.txt','utf-8')
     let obj_colObj = []
     if(str_colObj){
         obj_colObj = JSON.parse(str_colObj);
     }
+ 
     let obj_colObj2 = obj_colObj.filter(x=>x.nomUsu == nomU)
-    // console.log("obj_colObj2")
-    // console.log(obj_colObj2)
+ 
     if(obj_colObj2.length === 1){
-        console.log("<-r- mod 'Usuario'")
+        
         let xusuario = Clases.Usuario.fromJSON(obj_colObj2[0])
         //return obj_colObj2[0]
         return xusuario
     }else{
-        console.log("<-r- modelo '{}'")
+        
         return {}
     }
 
 }
 
 function obtenerSegUsuario(segU){
-    // cu no implementado
-    console.log("--> mod 'obtenerSegUsuario(nomU)'")
+ 
     let str_colObj = fs.readFileSync('./db/seguridad.txt','utf-8')
     let obj_colObj = []
     if(str_colObj){
@@ -178,19 +201,14 @@ function obtenerSegUsuario(segU){
     let obj_colObj2 = obj_colObj.filter(x=>x.nomUsu == segU)
 
     if(obj_colObj2.length == 1){
-        console.log("<-r- mod '{SegUsuario}'")
         return obj_colObj2[0]
     }else{
-        console.log("<-r- modelo '{}'")
         return {}
     }
 }
 
 function nomUsuExiste(data){
-    // cu No Implementado
-    console.log("--> mod 'nomUsuExiste(s_monUsu)'")
-    
-
+ 
     //Levanto todos los SegUsuarios de usuarios.txt
     let str_colObj = fs.readFileSync('./db/seguridad.txt','utf-8')
     let obj_colObj = []
@@ -206,17 +224,18 @@ function nomUsuExiste(data){
     if(tmp.length == 1){
         // Actualizo la fecha del token
         for(var i=0  ; i<obj_colObj.length ; i++){
+ 
             if(obj_colObj[i].nomUsu == data.user){
-                //obj_colObj[i].dateToken = new Date();
+                //actualizo la fecha del token (no el token)
                 obj_colObj[i].dateToken = new Date(new Date().getTime() - 3*60*60*1000);
             }
         }
         //console.log(JSON.stringify(obj_colObj))
         fs.writeFileSync('./db/seguridad.txt',JSON.stringify(obj_colObj)) 
-        console.log("<-r- mod 'true'")
+         
         return true;
     }else{
-        console.log("<-r- mod 'false'")
+         
         return false;
     }
 
@@ -240,8 +259,32 @@ function actualizarUsuario(usu){
 
 }
 
+function obtLisVer(arg1){
+    console.log(arg1);
+    let verListas = dameListas();
+    let filVerListas = []
+    //console.log(verListas[0].verificadores[0].nombre);
+    //console.log("-----------------------------")
+    for(var i=0 ; i<verListas.length ; i++){
+        for(var j=0 ; j<verListas[i].verificadores.length ; j++){
+            //console.log(verListas[i].verificadores[j].nombre)
+            if(verListas[i].verificadores[j].nombre == arg1.nombre){
+                filVerListas.push(verListas[i])
+            }
+        }
+    }
 
+    //console.log("------------------------------")
+    //console.log(filVerListas)
+    return filVerListas;
+}
 
+function testObtLisVer(){
+    let testUsu = new Clases.Usuario()
+    testUsu.setNombre("Alberto");
+    console.log(obtLisVer(testUsu))
+}
 
+testObtLisVer();
 
-module.exports = {guardarUsuarios , dameUsuarios, agregarUsuario, agregarSegUsuario, nomUsuExiste, eliminarUsuario, eliminarSegUsuario, obtenerUsuario, obtenerSegUsuario, dameColeccion, actualizarUsuario}
+module.exports = {obtLisVer, dameListas, guardarListas, guardarUsuarios , dameUsuarios, agregarUsuario, agregarSegUsuario, nomUsuExiste, eliminarUsuario, eliminarSegUsuario, obtenerUsuario, obtenerSegUsuario, dameColeccion, actualizarUsuario}

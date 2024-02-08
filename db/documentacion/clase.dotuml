@@ -52,10 +52,19 @@ class segUsuario {
   setPass(pas)  :void 
   getPass():string 
 }
-  
-  
 
 Usuario "1"--> Control "0..n"
+
+class Lista{nombre : String
+controles : Control
+verificadores : Usuario
+agregarVerificador(ver) : void
+agregarControl(con)
+setNombre(nom)
+getNombre()
+}
+Lista '1'--> Control '1..n';
+Lista '1'--> Usuario '1..n';
  
 }
 

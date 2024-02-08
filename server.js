@@ -44,14 +44,16 @@ app.post('/login',(req, res)=>{
         res.render('registro',{});  
     }
     if(req.body.cu00 == "Ingresar"){
-        let valUsu = Seguridad.validarUsuario(req.body)
         console.log("ser --> seg 'validarUsuario(req.body)'")
-
+        let valUsu = Seguridad.validarUsuario(req.body)
+        
         if(valUsu.validar){
             let contenido = JSON.stringify(valUsu.carga)
+            console.log("ser <-r- seg 'true'")
             console.log("web <-r- ser 'menu.html'")
             res.render('menu',{contenido, valUsu});            
         }else{
+            console.log("ser <-r- seg 'false'")
             console.log("nav <-r- server 'falla.html'")
             res.render('falla',{}); 
         }
@@ -90,7 +92,9 @@ app.post('/mercaderia',(req, res)=>{
 app.post('/api',(req,res)=>{
     
     console.log("web --> ser 'post/api'")
+    console.log("ser --> seg 'procesar(req.body)'")
     res.send(Seguridad.procesar(req.body));
+    console.log("ser <-r- seg '[{..}]'")
     console.log("web <-r- ser '[{..}]'")
 })
 

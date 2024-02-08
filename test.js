@@ -1,60 +1,7 @@
 const Clases = require('./clases.js');
-const Modelo = require('./modelo.js');
 const Controlador = require('./controlador.js');
 const Seguridad = require('./seguridad.js');
 const fs = require('fs');
-
-
-//  agregarUsuario-----------------------------------
-function testAgregarUsuario(){
-    const nU = new Clases.Usuario();
-    nU.setNombre("Enzo")
-    nU.setApellido("Vonkunoschy");
-    nU.setNomUsu("vonku")
-    Modelo.agregarUsuario(nU);
-}
-
-//  agregarSegUsuario-------------------------------
-function testAgregarSegUsuario(){
-    const oSU = new Clases.SegUsuario();
-    oSU.setNomUsu("vonku")
-    oSU.setPass("1234")
-    oSU.setToken("jkde90t09ijfer")
-    oSU.setDateToken(Seguridad.ya());
-    Modelo.agregarSegUsuario(oSU)
-}
-
-//  nomUsuExiste------------------------------------
-function testNomUsuExiste(){
-    //testAgregarUsuario()
-    if(Modelo.nomUsuExiste("vonku")){
-        console.log("test nomUsuExiste(...) Exitoso")
-    }else{
-        console.log("test nomUsuExiste(...) Falló")
-    }
-    //Modelo.eliminarUsuario("vonku");
-}
-
-//   obtenerUsuario---------------------------------
-function testObtenerUsuario(){
-    console.log(Modelo.obtenerUsuario("vonku"))
-}
-
-//  obtenerSegUsuario-------------------------------
-function testObtenerSegUsuario(){
-    console.log(Modelo.obtenerSegUsuario("vonku"))
-}
-
-//   eliminarUsuario---------------------------------
-function testEliminarUsuario(){
-    //testAgregarUsuario()
-    Modelo.eliminarUsuario("vonku")  
-}
-
-//   eliminarSegUsuario-----------------------------
-function testEliminarSegUsuario(){
-    Modelo.eliminarSegUsuario("vonku")
-}
 
 
 //   Clase Usuario ---------------------------------
@@ -113,16 +60,6 @@ function testTokUsu(){
 }
 
 
-function testDameColeccion(){
-    console.log("testDameColeccion----------------------")
-
-    let colUsu = Modelo.dameColeccion("usuarios");
-    console.log(colUsu);
-
-    console.log("fin-----------------------------------")    
-}
-
-
 function testControl(){
     console.log("testControl----------------------------")
     
@@ -133,6 +70,18 @@ function testControl(){
     unControl.setReajustable(true);
     unControl.setUltimaVer(new Date(2023,9,30,0,0,0,0));
 
+    console.log(unControl);
+
+    let str_unControl = JSON.stringify(unControl);
+    console.log(str_unControl);
+
+    let json_unControl = JSON.parse(str_unControl);
+    console.log(json_unControl);
+
+    let obj_unControl = Clases.Control.fromJSON(json_unControl);
+    console.log(obj_unControl);
+
+/* 
     const recControl = JSON.parse(JSON.stringify(unControl))
 
     const obRecControl = Clases.Control.fromJSON(recControl);
@@ -143,7 +92,7 @@ function testControl(){
     console.log(unControl[Object.keys(unControl)[3]] === obRecControl[Object.keys(obRecControl)[3]])
     console.log(unControl[Object.keys(unControl)[4]].getTime() === obRecControl[Object.keys(obRecControl)[4]].getTime())
     console.log(unControl[Object.keys(unControl)[5]] === obRecControl[Object.keys(obRecControl)[5]]) 
-
+*/
 }
 
 
@@ -209,7 +158,6 @@ function testObserver(){
 
     procesarLista(unaLista);
 
-
 }
 
 function procesarLista(lis){
@@ -229,7 +177,6 @@ function procesarLista(lis){
         console.log("difd: "+ difd)
         console.log(x.periodicidad <= parseInt((hoy.getTime() - x.ultimaVer.getTime())/(1000*60*60*24)))
 
-
     }));
 
     let nuevaLis = lis.controles.filter(x=>(x.periodicidad <= parseInt((hoy.getTime() - x.ultimaVer.getTime())/(1000*60*60*24))))
@@ -239,38 +186,89 @@ function procesarLista(lis){
 
 //-----------------------------------
 
-function testGuardarUsuarios(){
-    //let strTest = [{"type":"Usuario","controles":[],"nombre":"Enzo","apellido":"Vonkunoschy","nomUsu":"enzo"},{"type":"Usuario","controles":[],"nombre":"Tomas","apellido":"Camargo","nomUsu":"tomy"}]
-    Modelo.guardarUsuarios(Modelo.dameUsuarios())
-}
-
-
-function testDameUsuarios(){
-    console.log(Modelo.dameUsuarios())
-}
-
 
 function todosLosTest(){
-
-    testAgregarUsuario();
-    testAgregarSegUsuario();
-    
-     testNomUsuExiste();
-    testObtenerUsuario();
-    testObtenerSegUsuario();
-
-    testEliminarSegUsuario();
-    testEliminarUsuario();
-
-
     testSegUsuario();
     testTokUsu();
-    testDameColeccion();
     testControl();
     testObserver();
-    testGuardarUsuarios();
     testUsuario();
-    testDameUsuarios();
+    console.log(Clases.Lista.documentar());
 }
 
-todosLosTest()
+//todosLosTest()
+
+// testListas-------------------------------------
+function testLista(){
+    /*   Creo una lista  */
+    let unaLista = new Clases.Lista();
+    unaLista.setNombre("testLista");
+    //console.log(unaLista);
+
+    /* Creo un control  previo*/
+    let unControl = new Clases.Control();
+    unControl.setParametro("Tensión de Baterías");
+    unControl.setPeriodicidad(2);
+    unControl.setProrrogable(true);
+    unControl.setReajustable(true);
+    unControl.setUltimaVer(new Date(2023,9,30,0,0,0,0));
+    //console.log(unControl);
+
+    /* Creo otro Control posterior*/
+    let esteControl = new Clases.Control();
+    esteControl.setParametro("Pago alojamiento");
+    esteControl.setPeriodicidad(4);
+    esteControl.setProrrogable(true);
+    esteControl.setReajustable(true);
+    esteControl.setUltimaVer(new Date(2023,9,30,0,0,0,0))
+
+    /* Creo otro Control posterior*/
+    let otroControl = new Clases.Control();
+    otroControl.setParametro("Estado de Red");
+    otroControl.setPeriodicidad(6);
+    otroControl.setProrrogable(true);
+    otroControl.setReajustable(true);
+    otroControl.setUltimaVer(new Date(2023,9,30,0,0,0,0))
+
+    /* Creo un usuario */
+    let unUsuario = new Clases.Usuario();
+    unUsuario.setNomUsu("testUsu");
+    unUsuario.setNombre("testNombre");
+    unUsuario.setApellido("test Apellido");
+    //console.log(unUsuario);
+
+    /* Creo un usuario verificador */
+    let unVerificador = new Clases.Usuario();
+    unVerificador.setNombre("nombre verificador");
+    unVerificador.setApellido("apell Verificador");
+    unVerificador.setNomUsu("testUsuVer");
+
+    /* Agrego una observador a la lista */
+    unaLista.agregarObservador(unUsuario)
+    /* Agrego un control a la lista  */
+    unaLista.agregarControl(unControl);
+    /* Agrego un verificador a la lista */
+    unaLista.agregarVerificador(unVerificador);
+    /* Agregar otro control */
+    unaLista.agregarControl(otroControl);
+    unaLista.agregarControl(esteControl);
+    /* Agrego un autor */
+    unaLista.setAutor(unVerificador);
+
+    console.log("---------------------------")
+    console.log(unaLista)
+
+    console.log("---------------------------")
+    var str_unaLista = JSON.stringify(unaLista);
+    console.log(str_unaLista)
+
+    console.log("---------------------------")    
+    var obj_unaLista = JSON.parse(str_unaLista)
+    var obj_unaLista = Clases.Lista.fromJSON(obj_unaLista)
+    console.log(obj_unaLista);
+
+}
+
+
+//testControl();
+testLista();

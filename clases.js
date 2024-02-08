@@ -192,12 +192,72 @@ class Control{
     }
 }
 
+class Partida{
+    constructor(){
+        this.verificadores = [];
+        this.listas = [];
+    }
+
+    agregarVerificador(ver){
+        this.verificadores.push(ver);
+    }
+
+    agregarLista(lis){
+        this.listas.push(lis);
+    }
+}
+
 class Lista{
     constructor(){
         this.nombre;
+        this.autor = {};
         this.controles = [];
         this.observadores = [];
         this.verificadores = [];
+        this.type = "Lista";
+    }
+
+    static fromJSON(json){
+        
+        if(json.type == "Lista"){
+            //Instancio controles
+            let estaLista = new Lista();
+
+            estaLista.autor = Usuario.fromJSON(json.autor);
+
+            estaLista.setNombre(json.nombre) 
+
+            //console.log(estaLista.nombre)  
+                
+            for(var i=0 ; i<json.controles.length ; i++){
+                estaLista.agregarControl(Control.fromJSON(json.controles[i]))
+            }
+
+            for(var i=0 ; i<json.verificadores.length ; i++){
+                estaLista.agregarVerificador(Usuario.fromJSON(json.verificadores[i]))
+            }
+            estaLista.type = json.type
+
+            return estaLista;
+        }
+        
+    }
+
+    static documentar(){
+        let str = "class Lista{ \n "
+        str += "nombre : String \n"
+        str += "controles : Control \n"
+        str += "verificadores : Usuario \n"
+        str += "agregarVerificador(ver) : void \n"
+        str += "agregarControl(con) \n"
+        str += "setNombre(nom) \n"
+        str += "getNombre() \n"
+        str += "}"
+        str += "\n"
+        str += "Lista '1'--> Control '1..n'; \n"
+        str += "Lista '1'--> Usuario '1..n';"
+
+        return str
     }
 
     agregarObservador(obs){
@@ -216,6 +276,10 @@ class Lista{
 
     }
 
+    setAutor(aut){
+        this.autor = aut;
+    }
+
     setNombre(nom){
         this.nombre = nom;
     }
@@ -225,21 +289,6 @@ class Lista{
     }
 }
 
-class Partida{
-    constructor(){
-        this.verificadores = [];
-        this.listas = [];
-    }
-
-    agregarVerificador(ver){
-        this.verificadores.push(ver);
-    }
-
-    agregarLista(lis){
-        this.listas.push(lis);
-    }
-}
 
 
-
-module.exports = {Usuario, SegUsuario, TokUsu, Control, Lista};
+module.exports = {Lista, Usuario, SegUsuario, TokUsu, Control, Lista};
