@@ -56,6 +56,7 @@ function procesar(data){
 
         //Obtengo los usuarios para agregarle
         let colUsu = Modelo.dameUsuarios();
+        //Cuando encuentro el usuario le agrego todos los controles que llegaron desde el cliente
         for(var i=0 ; i<colUsu.length ; i++){
             if(colUsu[i].nomUsu == data.usuario.nomUsu){
                 colUsu[i].controles = newCon
@@ -65,6 +66,37 @@ function procesar(data){
 
         Modelo.guardarUsuarios(colUsu);
 
+        console.log("con --> mod 'dameListas()'")
+        let colLis = Modelo.dameListas()
+        console.log("con <-r- mod '[{Lista}]'")
+        
+        console.log(data.usuario.nomUsu)
+        console.log(data.carga)
+
+        for(var i=0 ; i<colLis.length ; i++){
+
+            //console.log(colLis[i].autor.nomUsu)
+
+            if(colLis[i].autor.nomUsu == data.usuario.nomUsu){
+                //Estas son MIS LISTAS
+                for(var j=0 ; j<colLis[i].controles.length ; j++){
+                    //Estos son los controles de mis listas
+                    //console.log(colLis[i].controles[j].parametro)
+                    for(var k=0 ; k<data.carga.length ; k++){
+                        if(colLis[i].controles[j].parametro == data.carga[k].parametro){
+                            console.log(colLis[i].controles[j].parametro+" - "+data.carga[k].parametro)
+                            colLis[i].controles[j] = data.carga[k]
+                        }
+                    }
+
+                }
+            }
+            
+        }
+
+        console.log("con --> mod 'guardarListas()'")
+        Modelo.guardarListas(colLis);
+        
     }
 
     if(data.cu == "cu13_listarVerificadores"){

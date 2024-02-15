@@ -156,6 +156,14 @@ class Control{
         return this.ultimaVer;
     }
 
+    atraso(){
+        var hoy = new Date();
+        var otro = new Date(this.ultimaVer)
+        var difNumFec = hoy.getTime()-otro.getTime()
+        var difDia = difNumFec/(1000*60*60*24)
+        return parseInt(difDia)
+    }
+
     suscribir(lis){
         this.observadores.push(lis)
     }

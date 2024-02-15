@@ -188,12 +188,12 @@ function procesarLista(lis){
 
 
 function todosLosTest(){
-    testSegUsuario();
-    testTokUsu();
-    testControl();
+    // testSegUsuario();
+    // testTokUsu();
+    // testControl();
     testObserver();
-    testUsuario();
-    console.log(Clases.Lista.documentar());
+    // testUsuario();
+    // console.log(Clases.Lista.documentar());
 }
 
 //todosLosTest()
@@ -268,7 +268,6 @@ function testLista(){
     console.log(obj_unaLista);
 
 }
-
 
 //testControl();
 testLista();

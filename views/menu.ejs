@@ -54,8 +54,9 @@
             miDiv.style.display = 'none';
 
             function colapsarNuevoControl(){
-                cerrarDivs();
+                
                 if (miDiv.style.display === 'none') {
+                    cerrarDivs();
                     miDiv.style.display = 'block'; // Cambia a 'block' para mostrar el contenido
                 } else {
                     miDiv.style.display = 'none'; // Cambia a 'none' para ocultar el contenido
@@ -67,9 +68,7 @@
         <hr>
 
         <button onclick="activarListarControles()">Mis controles</button>
-
         <div id="cu11_listarControles"></div>
-
         <script>
             
             const divLisCon = document.getElementById('cu11_listarControles');
@@ -78,8 +77,9 @@
             divParCer.push(divLisCon);
 
             function activarListarControles(){
-                cerrarDivs();
+                
                 if(divLisCon.style.display === 'none'){
+                    cerrarDivs();
                     divLisCon.style.display = 'block'; // Cambia a 'block' para mostrar el contenido
                     cu11_listarControles()
                 } else {
@@ -101,8 +101,9 @@
             divParCer.push(divLisVer);
 
             function activarListarVerificadores(){
-                cerrarDivs();
+                
                 if(divLisVer.style.display === 'none'){
+                    cerrarDivs();
                     divLisVer.style.display = 'block';
                     cu13_listarVerificadores();
                 }else{
@@ -124,14 +125,20 @@
             divParCer.push(divNueLis);
 
             function activarNuevaLista(){
-                cerrarDivs();
-                // if(divNueLis.style.display === 'none'){
+                
+                if(divNueLis.style.display === 'none'){
+                    cerrarDivs();
                     divNueLis.style.display = 'block';
+                    cu13_listarVerificadores();
                     divLisVer.style.display = 'block';
+                    cu11_listarControles();               
                     divLisCon.style.display = 'block';
-                // }else{
-                //     divNueLis.style.display = 'none';
-                // }
+
+                }else{
+                    divNueLis.style.display = 'none';
+                    divLisVer.style.display = 'none';
+                    divLisCon.style.display = 'none';                    
+                }
             }
         </script>
 
@@ -147,8 +154,9 @@
             divParCer.push(divMosMis);
             
             function activarMostrarListas(){
-                cerrarDivs();
+                
                 if(divMosMis.style.display === 'none'){
+                    cerrarDivs();
                     divMosMis.style.display = 'block';
                     cu15_listarListas()
                 }else{
@@ -177,8 +185,9 @@
             divParCer.push(divVerVer);
 
             function activarVerificar(){
-                cerrarDivs();
+                
                 if(divVerVer.style.display === 'none'){
+                    cerrarDivs();
                     divVerVer.style.display = 'block';
                     cu17_listasVerificar();
                 }else{
@@ -567,10 +576,20 @@
                 console.log("Controles:")
                 str += "<p><u>Controles:</u></p>";
 
+                var hoy = new Date()
+                var otro;
+                
+
                 str += "<ul>"
                 for(var j=0 ; j<data[i].controles.length ; j++){
-                    console.log("  "+data[i].controles[j].parametro)
-                    str += "<li>  "+data[i].controles[j].parametro+"</li>"
+
+                    otro = new Date(data[i].controles[j].ultimaVer)
+                    var difDias = parseInt( (hoy.getTime()-otro.getTime() )/(1000*60*60*24))
+                    difDias>data[i].controles[j].periodicidad?str3='red':str3='blue';
+                    
+                    console.log("  "+data[i].controles[j].parametro+"  difDias: "+difDias)
+                    str += "<li style='color: "+str3+";'>  "+data[i].controles[j].parametro+
+                    " - Verificación: "+difDias+"</li>"
                 }
                 str += "</ul>"
             }
@@ -625,40 +644,59 @@
         function mostrarVerificar(data){
             console.log(data);
 
+            let str ="";
+            let strId = "";
+            for(var i=0 ; i<data.length ; i++){
+                const obj  = {}
+                console.log(data[i]);
+                //console.log("Nombre de la Lista: "+data[i].nombre)
+                str += "<hr><p>Nombre de la Lista: <b>"+data[i].nombre+ "</b></p>";
+                obj.nombre = data[i].nombre;
 
-                let str ="";
-                for(var i=0 ; i<data.length ; i++){
+                //console.log("Lista solicitada por: "+data[i].autor.nombre);
+                str += "<p><b>Lista solicitada por: </b>"+data[i].autor.nombre + "</p>";
+                obj.autor = data[i].autor.nomUsu
+
+                console.log("Verificadores: ")
                 
-                    console.log(data[i]);
-                    //console.log("Nombre de la Lista: "+data[i].nombre)
-                    str += "<hr><p>Nombre de la Lista: <b>"+data[i].nombre+ "</b></p>";
-
-                    //console.log("Lista solicitada por: "+data[i].autor.nombre);
-                    str += "<p><b>Lista solicitada por: </b>"+data[i].autor.nombre + "</p>";
-
-                    console.log("Verificadores: ")
-                    
-                    let str2 = ""
-                    for(var j=0 ; j<data[i].verificadores.length ; j++ ){
-                        //console.log(data[i].verificadores[j].nombre)
-                        str2 += " "+data[i].verificadores[j].nombre
-                    }
-                    str += "</p><b>Verificadores:</b>"+str2+" </p>"
-
-                    //console.log("Lista de parámetros: ")
-                    str +="<p>Lista de parámetros:&nbsp;</p>"
-                    str2 = "";
-                    for(var j=0 ; j<data[i].controles.length ; j++){
-                        console.log(data[i].controles[j].parametro)
-                        str2 +="<li><input type='checkbox'>"+data[i].controles[j].parametro+"</li>"
-                    }
-                    str += "<ul>"+str2+"</ul>"
+                let str2 = ""
+                for(var j=0 ; j<data[i].verificadores.length ; j++ ){
+                    //console.log(data[i].verificadores[j].nombre)
+                    str2 += " "+data[i].verificadores[j].nombre
                 }
-        
-                document.getElementById('cu17_listasVerificar').innerHTML = str;
+                str += "</p><b>Verificadores:</b>"+str2+" </p>"
+
+                //console.log("Lista de parámetros: ")
+                str +="<p>Lista de parámetros:&nbsp;</p>"
+                str2 = "";
+                for(var j=0 ; j<data[i].controles.length ; j++){
+                    console.log(data[i].controles[j].parametro)
+                    obj.parametro = data[i].controles[j].parametro;
+                    let strId = JSON.stringify(obj);
+                    //str2 +="<li><input type='checkbox'>"+data[i].controles[j].parametro+"</li>"
+                    str +="<p><button id='"+strId+"' onclick='cu18_procesar(this)' style='background-color: green; color: white;'>&nbsp;</button>&nbsp;"+data[i].controles[j].parametro+"</p>"
+
+                }
+            }
+    
+            document.getElementById('cu17_listasVerificar').innerHTML = str;
 
         }
     
+        function cu18_procesar(arg){
+            console.log(arg);
+            const boton = arg;
+            const estiloBoton = window.getComputedStyle(boton);
+
+            // Obtener el color de fondo
+            const colorFondo = estiloBoton.backgroundColor;
+            console.log(`Color de fondo: ${colorFondo}`);
+
+            // Obtener el color del texto
+            const colorTexto = estiloBoton.color;
+            console.log(`Color del texto: ${colorTexto}`);
+            
+        }
     </script>
     
     
