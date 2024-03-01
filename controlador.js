@@ -161,8 +161,63 @@ function procesar(data){
         console.log("con --> mod 'listasVerificar()'")
         let lisVer = Modelo.obtLisVer(data.usuario)
         console.log("con <-r- mod '[{Lista}]")
-        //Devuelvo las listas obtenidas
-        return lisVer;
+
+        // Proceso las listas
+        let lisVer2 = [];
+        for(var i=0 ; i<lisVer.length ; i++){
+            lisVer2.push(Modelo.procesarLista(lisVer[i]))
+        }
+
+        //Devuelvo las listas obtenidas        
+        return lisVer2;
+    }
+
+    if(data.cu == "cu18_verificado"){
+        console.log(data.carga);
+        //Pido al modelo todas las listas para verificar
+        console.log("con --> mod 'dameListas()'")
+        let lisVer = Modelo.dameListas();
+        console.log("con <-r- mod '[{Lista}]")
+        
+        //recorro lista
+        console.log(lisVer[0].controles[0].parametro)
+        console.log(data.carga[0].parametro)
+        
+        for(var i= 0 ; i<lisVer.length ; i++){
+            for(var j=0 ; j<lisVer[i].controles.length ; j++){
+                for(var k=0 ; k<data.carga.length ; k++){
+                    console.log(lisVer[i].nombre +": "+ 
+                    lisVer[i].controles[j].parametro+": "+
+                    data.carga[k].parametro)
+            
+                    if(lisVer[i].controles[j].parametro == data.carga[k].parametro){
+                        console.log("Encontrado")
+                        
+                        lisVer[i].controles[j].setUltimaVer(new Date(new Date().getTime() - 3*60*60*1000));
+                        console.log(lisVer[i].controles[j].ultimaVer);
+                    }
+                }
+            }
+        }
+
+        // Guardo la lista actualizada
+        Modelo.guardarListas(lisVer);
+    }
+
+    if(data.cu == "reset"){
+
+        console.log("con --> mod 'dameListas()'")
+        let lisVer = Modelo.dameListas();
+        console.log("con <-r- mod '[{Lista}]")
+
+        for(var i= 0 ; i<lisVer.length ; i++){
+            for(var j=0 ; j<lisVer[i].controles.length ; j++){
+                lisVer[i].controles[j].ultimaVer = new Date(2024,0,0,0,0,0,0);
+            }
+        }
+
+        // Guardo la lista actualizada
+        Modelo.guardarListas(lisVer);
     }
 
 }

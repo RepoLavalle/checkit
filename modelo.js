@@ -261,21 +261,22 @@ function actualizarUsuario(usu){
 
 function obtLisVer(arg1){
     console.log(arg1);
+
+    // Obtengo todas las listas
     let verListas = dameListas();
     let filVerListas = []
-    //console.log(verListas[0].verificadores[0].nombre);
-    //console.log("-----------------------------")
+
+    // Recorro las listas para  verificar que tengan al usuario como verificador.
     for(var i=0 ; i<verListas.length ; i++){
         for(var j=0 ; j<verListas[i].verificadores.length ; j++){
-            //console.log(verListas[i].verificadores[j].nombre)
+            // Si el nombre del ferificador coincide, copio la lista
             if(verListas[i].verificadores[j].nombre == arg1.nombre){
                 filVerListas.push(verListas[i])
             }
         }
     }
-
-    //console.log("------------------------------")
-    //console.log(filVerListas)
+ 
+    // Devuelvo la lista filtrada
     return filVerListas;
 }
 
@@ -285,6 +286,21 @@ function testObtLisVer(){
     console.log(obtLisVer(testUsu))
 }
 
-testObtLisVer();
+function procesarLista(lis){
 
-module.exports = {obtLisVer, dameListas, guardarListas, guardarUsuarios , dameUsuarios, agregarUsuario, agregarSegUsuario, nomUsuExiste, eliminarUsuario, eliminarSegUsuario, obtenerUsuario, obtenerSegUsuario, dameColeccion, actualizarUsuario}
+    //console.log(lis)
+    // Recibo una lista
+    let hoy = new Date(new Date().getTime() - 3*60*60*1000)
+
+    // Bucle para procesar los controles
+    for(var i=0 ; i<lis.controles.length ; i++){
+        console.log(lis.controles[i].parametro);
+    }
+
+    let nuevaLis = lis.controles.filter(x=>(x.periodicidad <= parseInt((hoy.getTime() - x.ultimaVer.getTime())/(1000*60*60*24))))
+    return nuevaLis
+}
+
+//testObtLisVer();
+
+module.exports = {procesarLista, obtLisVer, dameListas, guardarListas, guardarUsuarios , dameUsuarios, agregarUsuario, agregarSegUsuario, nomUsuExiste, eliminarUsuario, eliminarSegUsuario, obtenerUsuario, obtenerSegUsuario, dameColeccion, actualizarUsuario}

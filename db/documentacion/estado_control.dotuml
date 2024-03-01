@@ -1,8 +1,136 @@
 StateDiagram{
 
-    state qdeh as "Qué día \n es hoy"
-    state scd as "Soy un control \n diario?"
-    state mvh as "Me verificaron \n hoy?"
+    //state html
 
+    state colapsarNuevoControl
+    state activarListarControles
+    state activarListarVerificadores
+    state activarNuevaLista
+    state activarMostrarListas
+
+    state activarVerificar
+    state cerrarDivs  // pendiente
+    state cu10_nuevoControl [fillcolor='green']
+    state cu11_listarControles [fillcolor='green']
+    state cu12_actualizarControles [fillcolor='green']
+
+    state listarControles
+    state armarDisplay
+    state seleccionar
+    state periodicidad
+    state prorrogable
+
+    state reajustable
+    state eliminar
+    state remMos
+    state cu13_listarVerificadores [fillcolor='green']
+    state listarVerificadores
+
+    state selVer
+    state cu14_nuevaLista [fillcolor='green']
+    state cu15_listarListas [fillcolor='green']
+    state listarListas
+    state modificarLista
+
+    state cu17_listasVerificar [fillcolor='green']
+    state mostrarVerificar
+    state cu18_procesar
+    state volver
+
+    state vistaHtml // creada
+    state html_cu17
+    state html_cu13
+    state html_cu15
+    state html_cu11
+
+    state modal as "modal" [fillcolor='green']
+
+
+vistaHtml -> colapsarNuevoControl
+vistaHtml -> activarListarControles
+vistaHtml -> activarListarVerificadores
+vistaHtml -> activarNuevaLista
+vistaHtml -> activarMostrarListas
+vistaHtml -> activarVerificar
+vistaHtml -> cu10_nuevoControl
+
+activarListarControles -> cu11_listarControles
+activarNuevaLista -> cu11_listarControles
+cu10_nuevoControl -> cu11_listarControles
+
+html_cu11 -> cu12_actualizarControles
+html_cu11 -> seleccionar
+
+cu11_listarControles -> listarControles
+
+armarDisplay -> html_cu11
+
+//html_cu11 -> cu12_actualizarControles
+
+//html_cu11 -> cu12_actualizarControles
+
+//cu11_listarControles -> listarControles
+
+seleccionar -> armarDisplay
+eliminar -> armarDisplay
+remMos -> armarDisplay
+listarControles -> armarDisplay
+
+//armarDisplay -> html_cu11
+//html_cu11 -> cu12_actualizarControles
+
+//armarDisplay -> html_cu11
+html_cu11 -> periodicidad
+html_cu11 -> prorrogable
+
+//armarDisplay -> html_cu11
+html_cu11 -> reajustable
+
+//armarDisplay -> html_cu11
+html_cu11 -> eliminar
+
+
+
+periodicidad -> remMos
+prorrogable -> remMos
+reajustable -> remMos
+
+activarListarVerificadores -> cu13_listarVerificadores
+activarNuevaLista -> cu13_listarVerificadores
+
+cu13_listarVerificadores -> listarVerificadores
+selVer -> listarVerificadores
+
+listarVerificadores -> html_cu13
+html_cu13 -> selVer
+
+
+
+vistaHtml -> cu14_nuevaLista
+
+activarMostrarListas -> cu15_listarListas
+
+cu15_listarListas -> listarListas
+
+listarListas -> html_cu15
+html_cu15 -> modificarLista
+
+activarVerificar -> cu17_listasVerificar
+
+cu17_listasVerificar -> mostrarVerificar
+
+mostrarVerificar -> html_cu17
+html_cu11 -> cu18_procesar
+
+modificarLista -> modal
+
+//vistaHtml -> volver
+
+//colapsarNuevoControl -> cerrarDivs
+//activarListarControles -> cerrarDivs
+//activarListarVerificadores -> cerrarDivs
+//activarNuevaLista -> cerrarDivs
+//activarMostrarListas -> cerrarDivs
+//activarVerificar -> cerrarDivs
 
 }

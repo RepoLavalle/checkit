@@ -297,6 +297,8 @@ class Lista{
     }
 }
 
+//console.log(Lista.documentar())
+
 
 
 module.exports = {Lista, Usuario, SegUsuario, TokUsu, Control, Lista};

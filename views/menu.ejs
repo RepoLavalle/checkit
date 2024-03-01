@@ -175,24 +175,48 @@
         <!--button onclick="document.querySelector('dialog').showModal()">Open</button-->
 
         <hr>
-        <button onclick='activarVerificar()'>Listas para Verificar</button>
-        <div id="cu17_listasVerificar">xxx</div>
-
+        <button onclick='activarVerificar()'>Listas para Verificar</button>  <!-- _hoy -->
+        <div id="cu17_listasVerificar"></div>
+      
+        
+        <hr>
         <script>
             const divVerVer = document.getElementById('cu17_listasVerificar');
-            divVerVer.style.display == 'none';
+            divVerVer.style.display = 'none';
 
             divParCer.push(divVerVer);
 
-            function activarVerificar(){
-                
+            function activarVerificar(){ 
+                // _hoy
                 if(divVerVer.style.display === 'none'){
-                    cerrarDivs();
-                    divVerVer.style.display = 'block';
-                    cu17_listasVerificar();
+                    // cerrarDivs();
+                    // divVerVer.style.display = 'block';
+                    cu17_listasVerificar(); // _hoy
                 }else{
                     divVerVer.style.display = 'none';
                 }
+
+                // cu17_listasVerificar();
+            }
+        </script>
+
+        <hr>
+        <button onclick='reset()'>Reset</button>
+
+        <script>
+            function reset(){
+                let layer0 = {};
+
+                let layer1 = {}
+                layer1.cu = "reset"
+                layer1.carga = layer0
+                layer1.usuario = user
+
+                fetch('http://localhost:3000/api',{
+                    method: 'POST',
+                    body: JSON.stringify(layer1),
+                    headers: {'Content-Type' : 'application/json'}
+                })
             }
         </script>
 
@@ -469,7 +493,6 @@
             
             console.log(matMar);
             listarVerificadores(matVer)
-
         }
         
         // cu14 Nueva Lista
@@ -480,6 +503,7 @@
             console.log(matMar)
             console.log(matObj)
             console.log(marCon)
+            
 
 
            // Colectar los usuarios seleccionados            
@@ -498,29 +522,39 @@
             console.log("lisCon")
             console.log(lisCon)
 
-            // crear un objeto js con los datos recopilados del formulario
-            let lis = {}
-            lis.autor = user
-            lis.nombre = document.getElementById('cu14_input').value;
-            lis.controles =     lisCon;
-            lis.observadores =  [];
-            lis.verificadores=  lisVer;
-            console.log(lis)
+            let nombreLista = document.getElementById('cu14_input').value;
+            console.log("nombreLista");
+            console.log(nombreLista);
+            let boolLisVer = lisVer.length == 0;
+            let boolLisCon = lisCon.length == 0;
+            let boolNom = nombreLista == "";
 
-            // Creo el paquete
-            let layer0 = lis
+            if(boolLisVer || boolLisCon || boolNom){
+                alert("Debe completar datos de la lista.");
+            }else{
+                // crear un objeto js con los datos recopilados del formulario
+                let lis = {}
+                lis.autor = user
+                lis.nombre = nombreLista;
+                lis.controles =     lisCon;
+                lis.observadores =  [];
+                lis.verificadores=  lisVer;
+                console.log(lis)
 
-            let layer1 = {}
-            layer1.cu = "cu14_nuevaLista"
-            layer1.carga = layer0
-            layer1.usuario = user
+                // Creo el paquete
+                let layer0 = lis
 
-            fetch('http://localhost:3000/api',{
-                method: 'POST',
-                body: JSON.stringify(layer1),
-                headers: {'Content-Type' : 'application/json'}
-            })
+                let layer1 = {}
+                layer1.cu = "cu14_nuevaLista"
+                layer1.carga = layer0
+                layer1.usuario = user
 
+                fetch('http://localhost:3000/api',{
+                    method: 'POST',
+                    body: JSON.stringify(layer1),
+                    headers: {'Content-Type' : 'application/json'}
+                })
+            }
         }
 
         // cu15 Listar Listas
@@ -616,10 +650,8 @@
             document.querySelector('dialog').showModal()
         }
     
-        function cu17_listasVerificar(){
-            // if(document.getElementById('cu17_listasVerificar').innerHTML == ""){
-                console.log("cu17");
-                // <div id="cu17_listasVerificar"></div>xxx
+        function cu17_listasVerificar(){ // _hoy
+ 
                 let layer0 = {}
 
                 let layer1 = {}
@@ -634,14 +666,10 @@
                 })
                 .then(data=>data.json())
                 .then(data=>mostrarVerificar(data))
-                //.then(data=>listarListas(data))
-
-            // }else{
-            //     document.getElementById('cu17_listasVerificar').innerHTML = "";
-            // }
+ 
         }
 
-        function mostrarVerificar(data){
+        function mostrarVerificar(data){ // _hoy 
             console.log(data);
 
             let str ="";
@@ -674,29 +702,68 @@
                     obj.parametro = data[i].controles[j].parametro;
                     let strId = JSON.stringify(obj);
                     //str2 +="<li><input type='checkbox'>"+data[i].controles[j].parametro+"</li>"
-                    str +="<p><button id='"+strId+"' onclick='cu18_procesar(this)' style='background-color: green; color: white;'>&nbsp;</button>&nbsp;"+data[i].controles[j].parametro+"</p>"
+                    str +="<p><button id='"+strId+
+                        "' onclick='cu18_procesar(this)' style='background-color: green; color: white;'>&nbsp;</button>&nbsp;"+data[i].controles[j].parametro+"</p>"
 
                 }
             }
-    
+            str += "<button onclick='cu18_actualizarDB()'>Verificado</button>"
+
             document.getElementById('cu17_listasVerificar').innerHTML = str;
 
+            cerrarDivs();
+            divVerVer.style.display = 'block';
         }
     
+        let swCheck = [] //Parámetros de las Listas del Autor
+
         function cu18_procesar(arg){
+            console.log("-> cu18_procesar(arg)  --------------");
             console.log(arg);
-            const boton = arg;
-            const estiloBoton = window.getComputedStyle(boton);
-
-            // Obtener el color de fondo
-            const colorFondo = estiloBoton.backgroundColor;
-            console.log(`Color de fondo: ${colorFondo}`);
-
-            // Obtener el color del texto
-            const colorTexto = estiloBoton.color;
-            console.log(`Color del texto: ${colorTexto}`);
             
+            let idBoton = arg.getAttribute('id')
+
+            let verificando = JSON.parse(idBoton);
+            console.log("verificando")
+            console.log(verificando)
+            let filtrado2 = [];
+            //console.log(verificado);
+            let filtrado = swCheck.filter(x=>x.nombre == verificando.nombre && x.autor == verificando.autor && x.parametro == verificando.parametro)
+            console.log("filtrado.length")
+            console.log(filtrado.length)
+            if(filtrado.length == 0){
+                swCheck.push(verificando)
+                document.getElementById(idBoton).innerText = "X";
+            }else{
+                filtrado2 = swCheck.filter(x=>!(x.nombre == verificando.nombre && x.autor == verificando.autor && x.parametro == verificando.parametro));
+                swCheck = filtrado2;
+                document.getElementById(idBoton).innerHTML = "&nbsp;";
+            }
+            
+            
+            console.log(swCheck);
         }
+
+        function cu18_actualizarDB(){
+            console.log("cu18_actualizarDB()");
+
+            let layer0 = swCheck;
+
+            let layer1 = {}
+            layer1.cu = "cu18_verificado"
+            layer1.carga = layer0
+            layer1.usuario = user
+
+            fetch('http://localhost:3000/api',{
+                method: 'POST',
+                body: JSON.stringify(layer1),
+                headers: {'Content-Type' : 'application/json'}
+            })
+            // .then(data=>data.json())
+            // .then(data=>mostrarVerificar(data))
+        }
+
+        
     </script>
     
     
