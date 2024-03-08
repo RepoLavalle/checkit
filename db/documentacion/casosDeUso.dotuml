@@ -12,7 +12,8 @@ note "Implementados \n Pintados" bottom of gen
         usecase "Nueva \n Lista\n cu14"             as cu14 [fillcolor=paleturquoise]
         usecase "Listar \n Listas \n cu15"          as cu15 [fillcolor=paleturquoise]
         usecase "Modificar \n Listas \n 16"         as cu16
-        usecase "listasVerificar \n cu17"           as cu17
+        usecase "listasVerificar \n cu17"           as cu17 [fillcolor=paleturquoise]
+        usecase "verificar \n cu18"                 as cu18 [fillcolor=paleturquoise]
 
         gen -- cu00 
         gen -- cu10
@@ -24,6 +25,7 @@ note "Implementados \n Pintados" bottom of gen
         gen -- cu15
         cu15 -e-> cu16
         gen -- cu17
+        cu17 -e-> cu18
 
 
     }

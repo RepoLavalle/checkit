@@ -43,7 +43,9 @@ StateDiagram{
     state html_cu15
     state html_cu11
 
-    state modal as "modal" [fillcolor='green']
+    state modal as "modal" 
+    state borrarLista
+    state cu19_borrarLista [fillcolor='green']
 
 
 vistaHtml -> colapsarNuevoControl
@@ -123,6 +125,9 @@ mostrarVerificar -> html_cu17
 html_cu11 -> cu18_procesar
 
 modificarLista -> modal
+
+html_cu15 -> borrarLista
+borrarLista -> cu19_borrarLista
 
 //vistaHtml -> volver
 

@@ -4,6 +4,7 @@ const Controlador = require('./controlador.js');
 const Seguridad = require('./seguridad.js');
 
 function procesar(data){
+    //data = {carga:     ,   }
 
     // si caso de uso es nuevoControl
     if(data.cu == "nuevoControl"){
@@ -69,9 +70,7 @@ function procesar(data){
         console.log("con --> mod 'dameListas()'")
         let colLis = Modelo.dameListas()
         console.log("con <-r- mod '[{Lista}]'")
-        
-        console.log(data.usuario.nomUsu)
-        console.log(data.carga)
+    
 
         for(var i=0 ; i<colLis.length ; i++){
 
@@ -84,7 +83,7 @@ function procesar(data){
                     //console.log(colLis[i].controles[j].parametro)
                     for(var k=0 ; k<data.carga.length ; k++){
                         if(colLis[i].controles[j].parametro == data.carga[k].parametro){
-                            console.log(colLis[i].controles[j].parametro+" - "+data.carga[k].parametro)
+                            //console.log(colLis[i].controles[j].parametro+" - "+data.carga[k].parametro)
                             colLis[i].controles[j] = data.carga[k]
                         }
                     }
@@ -137,15 +136,9 @@ function procesar(data){
     if(data.cu == "cu15_listarListas"){
         console.log("note right 'cu15_listarListas'")
 
-        console.log("data");
-        console.log(data);
-
         //Pido al modelo todas las listas
         console.log("con --> mod 'dameListas()'")
         let todLis = Modelo.dameListas()
-
-        console.log("todLis")
-        console.log(todLis)
 
         console.log("con <-r- mod '[{Lista}]")
         //Devuelvo las listas obtenidas
@@ -173,7 +166,7 @@ function procesar(data){
     }
 
     if(data.cu == "cu18_verificado"){
-        console.log(data.carga);
+        
         //Pido al modelo todas las listas para verificar
         console.log("con --> mod 'dameListas()'")
         let lisVer = Modelo.dameListas();
@@ -202,6 +195,36 @@ function procesar(data){
 
         // Guardo la lista actualizada
         Modelo.guardarListas(lisVer);
+    }
+
+    if(data.cu == "cu19_borrarLista"){
+        console.log("cu19_borrarLista")
+        console.log(data)
+
+        //cargo todas las listas
+        console.log("con --> mod 'dameListas()'")
+        let lisVer = Modelo.dameListas();
+        console.log("con <-r- mod '[{Lista}]")
+
+        // filtro las listas por autor
+        
+        let otrasListas = lisVer.filter(x=>x.autor.nomUsu != data.carga.autor.nomUsu)
+        let misListas = lisVer.filter(x=>x.autor.nomUsu == data.carga.autor.nomUsu)
+        console.log("misListas")
+        console.log(misListas)
+
+        // filtro las listas por distinto nombre
+        let newMisListas = misListas.filter(x=>x.nombre != data.carga.nombre)
+        console.log("newMisListas")
+        console.log(newMisListas)
+        
+        let listaFinal = otrasListas.concat(newMisListas);
+        
+        // guardo el resultado del filtrado
+        console.log("con --> mod 'guardarListas(todasListas)'")
+        Modelo.guardarListas(listaFinal)
+
+
     }
 
     if(data.cu == "reset"){

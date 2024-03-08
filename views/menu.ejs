@@ -7,13 +7,14 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
+    <pre id='intercambio' hidden><%= contenido %></pre>
     <h1>Sistema Checklist</h1>
-    <h2>Menú:</h2>
-    <hr>   
-    <pre id='intercambio'><%= contenido %></pre>
-    <pre><%= valUsu.carga.nombre %></pre>
-    <pre><%= valUsu.carga.apellido %></pre>
-    <pre><%= valUsu.carga.nomUsu %></pre>
+    
+    
+
+    <pre><%= valUsu.carga.nombre %>&nbsp;<%= valUsu.carga.apellido %>&nbsp;[<%= valUsu.carga.nomUsu %>]</pre>
+    <pre></pre>
+    <pre></pre>
     <button onclick="volver()">Salir</button>
     <div id="cu10">
         <hr>
@@ -77,7 +78,7 @@
             divParCer.push(divLisCon);
 
             function activarListarControles(){
-                
+                cuActivo = "11";
                 if(divLisCon.style.display === 'none'){
                     cerrarDivs();
                     divLisCon.style.display = 'block'; // Cambia a 'block' para mostrar el contenido
@@ -101,7 +102,7 @@
             divParCer.push(divLisVer);
 
             function activarListarVerificadores(){
-                
+                cuActivo = "13";
                 if(divLisVer.style.display === 'none'){
                     cerrarDivs();
                     divLisVer.style.display = 'block';
@@ -237,6 +238,10 @@
         let user = JSON.parse(str_data)
         console.log(user);
 
+        document.getElementById('radio11').checked = true;
+        document.getElementById('radio12').checked = false;
+        document.getElementById('radio21').checked = false;
+        document.getElementById('radio22').checked = true;
 
         function cu10_nuevoControl(){
             let cu10Nombre = document.getElementById('parametro').value;
@@ -258,34 +263,43 @@
             rea[0].checked? reajustable=true:null;
             console.log(reajustable);
 
-            document.getElementById('radio11').checked = false
-            document.getElementById('radio12').checked = false
-            document.getElementById('radio21').checked = false
-            document.getElementById('radio22').checked = false
+            document.getElementById('radio11').checked = true;
+            document.getElementById('radio12').checked = false;
+            document.getElementById('radio21').checked = false;
+            document.getElementById('radio22').checked = true;
 
             des = document.getElementById('desde').value;
             document.getElementById('desde').value = ""
             // console.log(des)
             // console.log(JSON.stringify(des))
 
-            let layer0 = {}
-            layer0.parametro = cu10Nombre
-            layer0.periodicidad = per
-            layer0.prorrogable = prorrogable
-            layer0.reajustable = reajustable
-            layer0.desde = des
+            console.log(cu10Nombre);
+            console.log(per);
+            console.log(pro);
+            console.log(rea);
+            console.log(des);
+            if(cu10Nombre != "" && per != "" && des != ""){
+                let layer0 = {}
+                layer0.parametro = cu10Nombre
+                layer0.periodicidad = per
+                layer0.prorrogable = prorrogable
+                layer0.reajustable = reajustable
+                layer0.desde = des
 
-            let layer1 = {}
-            layer1.cu = "nuevoControl"
-            layer1.carga = layer0
-            layer1.usuario = user
+                let layer1 = {}
+                layer1.cu = "nuevoControl"
+                layer1.carga = layer0
+                layer1.usuario = user
 
-            fetch('http://localhost:3000/api',{
-                method: 'POST',
-                body: JSON.stringify(layer1),
-                headers: {'Content-Type' : 'application/json'}
-            }).then(cu11_listarControles())  // 20231205
-
+                fetch('http://localhost:3000/api',{
+                    method: 'POST',
+                    body: JSON.stringify(layer1),
+                    headers: {'Content-Type' : 'application/json'}
+                }).then(data=>{cuActivo !== "15"?  cu11_listarControles():matObj = data})  
+                //20231205
+            }else{
+                alert("Debe completar los campos!")
+            }
         }
 
         function cu11_listarControles(){
@@ -307,7 +321,8 @@
                     headers: {'Content-Type' : 'application/json'}
                 })
                 .then(data=>data.json())
-                .then(data=>listarControles(data[0]))
+                //.then(data=>{console.log(cuActivo); cuActivo !== "15"? listarControles(data[0]):matObj=data[0].controles;})
+                .then(data=>{marCon = []; listarControles(data[0])});
             // }else{
             //     console.log("running else....")
             //     document.getElementById('cu11_listarControles').value == "";
@@ -339,8 +354,10 @@
 
         function listarControles(data){
             //console.log(data);
-            matObj = data.controles;            
+            matObj = data.controles; 
+            if(cuActivo !== "15"){        
             armarDisplay(data.controles)
+            }
 
         }
 
@@ -354,13 +371,13 @@
             for(var i=0 ; i<matObj.length ; i++){
                 var strObj = JSON.stringify(matObj[i]);
                 marCon[i]==true?str1="X":str1="&nbsp;"
-                btn += "<button id='"+strObj+"' onclick='seleccionar(this)'>"+str1+"</button>&nbsp;"+ 
+                btn += "<p><button id='"+strObj+"' onclick='seleccionar(this)'>"+str1+"</button>&nbsp;"+ 
                     "<label>"+matObj[i].parametro+
                     "<button id='"+strObj+"' onclick='periodicidad(this)'>"+matObj[i].periodicidad+"</button>"+                 
                     "<button id='"+strObj+"' onclick='prorrogable(this)'>"+    matObj[i].prorrogable+"</button>"+
                     "<button id='"+strObj+"' onclick='reajustable(this)'>"+    matObj[i].reajustable+"</button>"+
                     "<button id='"+strObj+"' onclick='eliminar(this)'>"+    "Eliminar"+"</button>"+
-                    "<br>"
+                    "</p>"
                     
 
             }
@@ -449,37 +466,45 @@
             })
             .then(data=>data.json())
             //.then(data=>console.log(data))
-            .then(data=>listarVerificadores(data))
+            .then(data=>{console.log(cuActivo); matMar = [];cuActivo !== "15"?listarVerificadores(data):matVer=data;})
+            //.then(data=>listarVerificadores(data));
         }
 
-        let matVer = []  // Global
+        let matVer = []  // Global Vector con Verificadores
         let matMar = []  // Verificadores seleccionados.
         
         function listarVerificadores(data){
-            let disVer = document.getElementById('cu13_listarVerificadores')
-            disVer.innerHTML = "hola"
-            matVer = data;
- 
-            let str  = "";
-            let str2 = "";
-            let str3 = "";
-            
-            for(var i=0 ; i<data.length ; i++){
-                matMar[i]== null ? str3 = "&nbsp;" : str3 = "X";
-                str2 = JSON.stringify(data[i])
-                str += "<p><button onclick='selVer(this)' "+
-                    "id='"+str2+"'"+
-                    ">"+str3+"</button>&nbsp;" + data[i].nombre + "</p>"
-            }
+             matVer = data;
+            if(cuActivo != "15"){
+                let disVer = document.getElementById('cu13_listarVerificadores');
+                let str  = "";
+                let str2 = "";
+                let str3 = "";
+                
+                for(var i=0 ; i<data.length ; i++){
 
-            disVer.innerHTML = str;
+                    matMar[i]== null ? str3 = "&nbsp;" : str3 = "X";
+                    str2 = JSON.stringify(data[i])
+                    str += "<p><button onclick='selVer(this)' "+
+                        "id='"+str2+"'"+
+                        ">"+str3+"</button>&nbsp;" + data[i].nombre + "</p>"
+                }
+
+                disVer.innerHTML = str;
+            }else{
+               
+            }
+        
         }
 
         function selVer(data){
-
+            console.log("corriendo selVer(data)")
             // Obtengo el objeto
             let eveObj = JSON.parse(data.getAttribute('id'));
-
+            console.log("eveObj")
+            console.log(eveObj)
+            console.log("matVer")
+            console.log(matVer)
             // Recorro el vector de objetos para ver cuál es el seleccionado
             let i=-1
             do{
@@ -499,13 +524,7 @@
 
         function cu14_nuevaLista(){
             console.log("cu14 Nueva Lista")
-            console.log(matVer)
-            console.log(matMar)
-            console.log(matObj)
-            console.log(marCon)
-            
-
-
+            cuActivo = "14";
            // Colectar los usuarios seleccionados            
             let lisVer = []//Objeto Lista - atributo Verificadores
             for(var i=0 ; i<matMar.length ; i++){
@@ -577,25 +596,33 @@
                     headers: {'Content-Type' : 'application/json'}
                 })
                 .then(data=>data.json())
-                //.then(data=>console.log(data))
+                // data es una colección de listas de las que soy autor
                 .then(data=>listarListas(data))
-            // }else{
-            //     document.getElementById('cu15_listarListas').innerHTML = '';
-            // }
+    
         }
 
-        let lisLis = []  // Global
+        let lisLis = []  // Global Coleccion de listas de las que soy autor
         let lisMar = []  // Verificadores seleccionados.            
         
 
         function listarListas(data){
             //cu15
-            console.log("Listas de Control: --------------------")
+            lisLis = data;
+            console.log("state listarListas");
+            console.log("-> listarListas");
+
+            cuActivo = "15";
+            cu13_listarVerificadores();
+            cu11_listarControles();
+
             let str = "";
             for(var i=0 ; i<data.length ; i++){
                 let str2 = JSON.stringify(data[i]);
                 console.log("\n"+data[i].nombre)
-                str += "<p><button id='"+str2+"' onclick='modificarLista(this)'>&nbsp;&nbsp;</button>&nbsp;<b>"+data[i].nombre+"</b></p>"
+                str += "<p><b>"+data[i].nombre+"</b>"+
+                    " <button id='"+str2+"' onclick='modificarLista(this)'>Modificar</button>&nbsp; "+
+                    " <button id='"+str2+"' onclick='borrarLista(this)'>Eliminar</button>&nbsp; "+
+                    "   </p>";
 
                 console.log("Verificadores:")
                 str += "<p><u>Verificadores:</u></p>"
@@ -610,20 +637,31 @@
                 console.log("Controles:")
                 str += "<p><u>Controles:</u></p>";
 
-                var hoy = new Date()
+                var hoy = new Date();
                 var otro;
                 
+                // console.log("Hoy")
+                // console.log(hoy)
 
                 str += "<ul>"
                 for(var j=0 ; j<data[i].controles.length ; j++){
 
                     otro = new Date(data[i].controles[j].ultimaVer)
+
                     var difDias = parseInt( (hoy.getTime()-otro.getTime() )/(1000*60*60*24))
+
+                    var regresiva = data[i].controles[j].periodicidad - difDias;
+                    
                     difDias>data[i].controles[j].periodicidad?str3='red':str3='blue';
                     
                     console.log("  "+data[i].controles[j].parametro+"  difDias: "+difDias)
+                    if(regresiva>0){
                     str += "<li style='color: "+str3+";'>  "+data[i].controles[j].parametro+
-                    " - Verificación: "+difDias+"</li>"
+                    " - Verificación: "+difDias+" faltan: "+regresiva+"</li>"
+                    }else{
+                    str += "<li style='color: "+str3+";'>  "+data[i].controles[j].parametro+
+                    " - Verificación: "+difDias+"</li>"                        
+                    }
                 }
                 str += "</ul>"
             }
@@ -631,7 +669,50 @@
         }
         
         // cu16 
+
+        let cuActivo = "";  // Gloabal Caso de uso que se está ejecutando
+
+        function borrarLista(data){
+            cuActivo = "19"
+            let lisBor = JSON.parse(data.getAttribute('id'));
+            console.log(lisBor.nombre);
+
+            var resultado = window.confirm('¡Va a eliminar la lista: '+lisBor.nombre+"!");
+
+            if (resultado === true) {
+            
+                let newLisLis = lisLis.filter(x=>x.nombre != lisBor.nombre);
+                newLisLis.forEach(element => {console.log(element.nombre)});
+                lisLis = newLisLis;
+                listarListas(lisLis);
+                cu19_borrarLista(lisBor); 
+            } else {
+            
+
+            }
+        }
+
+        function cu19_borrarLista(data){
+            let layer0 = data
+
+            let layer1 = {}
+            layer1.cu = "cu19_borrarLista"
+            layer1.carga = layer0
+            layer1.usuario = user
+
+            fetch('http://localhost:3000/api',{
+            method: 'POST',
+            body: JSON.stringify(layer1),
+            headers: {'Content-Type' : 'application/json'}
+            })
+            //.then(data=>data.json())
+            //.then(data=>mostrarVerificar(data))
+
+        }
+
         function modificarLista(arg1){
+
+
             var lis = JSON.parse(arg1.getAttribute('id'))
             console.log(lis);
             let modal = document.getElementById('modal');
@@ -719,18 +800,16 @@
 
         function cu18_procesar(arg){
             console.log("-> cu18_procesar(arg)  --------------");
-            console.log(arg);
             
+            // Obtengo el control para verificar
             let idBoton = arg.getAttribute('id')
-
             let verificando = JSON.parse(idBoton);
-            console.log("verificando")
-            console.log(verificando)
+
+            // Observo si el control ya está en el 
             let filtrado2 = [];
-            //console.log(verificado);
             let filtrado = swCheck.filter(x=>x.nombre == verificando.nombre && x.autor == verificando.autor && x.parametro == verificando.parametro)
             console.log("filtrado.length")
-            console.log(filtrado.length)
+            console.log( filtrado.length )
             if(filtrado.length == 0){
                 swCheck.push(verificando)
                 document.getElementById(idBoton).innerText = "X";
@@ -759,8 +838,8 @@
                 body: JSON.stringify(layer1),
                 headers: {'Content-Type' : 'application/json'}
             })
-            // .then(data=>data.json())
-            // .then(data=>mostrarVerificar(data))
+            
+            cerrarDivs();
         }
 
         

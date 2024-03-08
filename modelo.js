@@ -287,18 +287,28 @@ function testObtLisVer(){
 }
 
 function procesarLista(lis){
-
-    //console.log(lis)
-    // Recibo una lista
+ 
     let hoy = new Date(new Date().getTime() - 3*60*60*1000)
+ 
+    let nuevosControles = [];
 
     // Bucle para procesar los controles
     for(var i=0 ; i<lis.controles.length ; i++){
         console.log(lis.controles[i].parametro);
+        console.log(lis.controles[i].periodicidad);
+        console.log(lis.controles[i].ultimaVer);
+        console.log((hoy.getTime() - lis.controles[i].ultimaVer.getTime())/(1000*60*60*24));
+        console.log((lis.controles[i].periodicidad <= parseInt((hoy.getTime() - lis.controles[i].ultimaVer.getTime())/(1000*60*60*24))));
+        if((lis.controles[i].periodicidad <= parseInt((hoy.getTime() - lis.controles[i].ultimaVer.getTime())/(1000*60*60*24)))){
+     
+            nuevosControles.push(lis.controles[i]);
+        }
     }
 
-    let nuevaLis = lis.controles.filter(x=>(x.periodicidad <= parseInt((hoy.getTime() - x.ultimaVer.getTime())/(1000*60*60*24))))
-    return nuevaLis
+    lis.controles = nuevosControles;
+
+    //let nuevaLis = lis.controles.filter(x=>(x.periodicidad <= parseInt((hoy.getTime() - x.ultimaVer.getTime())/(1000*60*60*24))))
+    return lis;
 }
 
 //testObtLisVer();
