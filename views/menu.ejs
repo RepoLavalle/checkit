@@ -68,7 +68,7 @@
 
         <hr>
 
-        <button onclick="activarListarControles()">Mis controles</button>
+        <button onclick="activarListarControles()" id="button_cu11">Mis controles</button> <!-- ya -->
         <div id="cu11_listarControles"></div>
         <script>
             
@@ -79,6 +79,8 @@
 
             function activarListarControles(){
                 cuActivo = "11";
+                document.getElementById('button_cu11').removeAttribute('disabled');
+
                 if(divLisCon.style.display === 'none'){
                     cerrarDivs();
                     divLisCon.style.display = 'block'; // Cambia a 'block' para mostrar el contenido
@@ -92,7 +94,7 @@
         <!-- button onclick='cu12_actualizarControles()'>Actualizar</button -->
 
         <hr>
-        <button onclick="activarListarVerificadores()">Mis Verificadores</button>
+        <button onclick="activarListarVerificadores()" id='button_cu13'>Mis Verificadores</button> <!-- ya_ -->
         <div id="cu13_listarVerificadores"></div>
 
         <script>
@@ -126,19 +128,26 @@
             divParCer.push(divNueLis);
 
             function activarNuevaLista(){
-                
+
                 if(divNueLis.style.display === 'none'){
+                    cuActivo = "14";
                     cerrarDivs();
                     divNueLis.style.display = 'block';
                     cu13_listarVerificadores();
                     divLisVer.style.display = 'block';
                     cu11_listarControles();               
                     divLisCon.style.display = 'block';
-
+                    document.getElementById('button_cu11').setAttribute('disabled','true'); // ya_
+                    document.getElementById('button_cu13').setAttribute('disabled','true'); // ya_
+                    
                 }else{
+
+                    document.getElementById('button_cu11').removeAttribute('disabled'); // ya_                     
+                    document.getElementById('button_cu13').removeAttribute('disabled'); // ya_                     
                     divNueLis.style.display = 'none';
                     divLisVer.style.display = 'none';
-                    divLisCon.style.display = 'none';                    
+                    divLisCon.style.display = 'none';
+            
                 }
             }
         </script>
@@ -168,15 +177,14 @@
         </script>
 
         <dialog>
-            <p>Este es el contenido de la ventana modal.</p>
             <div id="modal"></div>
-            <button onclick="document.querySelector('dialog').close()">Close</button>
+            <button onclick="document.querySelector('dialog').close()">Cerrar</button>
+            &nbsp;&nbsp;&nbsp;
+            <button onclick='cu16_modificarLista()'>Actualizar</button>  <!-- hoy_ --> 
         </dialog>
-          
-        <!--button onclick="document.querySelector('dialog').showModal()">Open</button-->
 
         <hr>
-        <button onclick='activarVerificar()'>Listas para Verificar</button>  <!-- _hoy -->
+        <button onclick='activarVerificar()'>Listas para Verificar</button> 
         <div id="cu17_listasVerificar"></div>
       
         
@@ -188,21 +196,19 @@
             divParCer.push(divVerVer);
 
             function activarVerificar(){ 
-                // _hoy
+             
                 if(divVerVer.style.display === 'none'){
-                    // cerrarDivs();
-                    // divVerVer.style.display = 'block';
-                    cu17_listasVerificar(); // _hoy
+
+                    cu17_listasVerificar();  
                 }else{
                     divVerVer.style.display = 'none';
                 }
 
-                // cu17_listasVerificar();
             }
         </script>
 
         <hr>
-        <button onclick='reset()'>Reset</button>
+        <button onclick='reset()' disabled>Reset</button>
 
         <script>
             function reset(){
@@ -350,7 +356,7 @@
             
         }
 
-        let matObj = []; // Global
+        let matObj = []; // Global   // hoy_  matObj almacena los controles
 
         function listarControles(data){
             //console.log(data);
@@ -364,14 +370,21 @@
         let marCon = [];
 
         function armarDisplay(matObj){
+            //alert("armarDisplay: "+cuActivo)
             var display = document.getElementById('cu11_listarControles');
             // construyo los botones a partir del vector
             var btn = ""
-            var str1 =""
+            var str1 ="" //Marca la x o el espacio en el botón
+            var str2 = "";
             for(var i=0 ; i<matObj.length ; i++){
                 var strObj = JSON.stringify(matObj[i]);
+
                 marCon[i]==true?str1="X":str1="&nbsp;"
-                btn += "<p><button id='"+strObj+"' onclick='seleccionar(this)'>"+str1+"</button>&nbsp;"+ 
+
+                cuActivo == "11"?str2 = "":"";
+                cuActivo == "14"?str2 = "<button id='"+strObj+"' onclick='seleccionar(this)'>"+str1+"</button>&nbsp;":"";
+
+                btn += "<p>"+str2+ 
                     "<label>"+matObj[i].parametro+
                     "<button id='"+strObj+"' onclick='periodicidad(this)'>"+matObj[i].periodicidad+"</button>"+                 
                     "<button id='"+strObj+"' onclick='prorrogable(this)'>"+    matObj[i].prorrogable+"</button>"+
@@ -381,7 +394,10 @@
                     
 
             }
-            btn += "<button onclick='cu12_actualizarControles()'>Actualizar</button>";
+            if("11" == cuActivo){
+                btn += "<button onclick='cu12_actualizarControles()' id='cu12_actualizarControles'>Actualizar</button>"; // ya_
+            }
+
             display.innerHTML = btn
         }
 
@@ -467,15 +483,35 @@
             .then(data=>data.json())
             //.then(data=>console.log(data))
             .then(data=>{console.log(cuActivo); matMar = [];cuActivo !== "15"?listarVerificadores(data):matVer=data;})
-            //.then(data=>listarVerificadores(data));
+            //.then(data=>{console.log(cuActivo); matMar = [];cuActivo == "13"?matVer=data:listarVerificadores(data);})
+           
         }
 
         let matVer = []  // Global Vector con Verificadores
         let matMar = []  // Verificadores seleccionados.
+
+
+
         
         function listarVerificadores(data){
              matVer = data;
-            if(cuActivo != "15"){
+            if(cuActivo == "13"){ // ya_
+                let disVer = document.getElementById('cu13_listarVerificadores');
+                let str  = "";
+                let str2 = "";
+                let str3 = "";
+                
+                for(var i=0 ; i<data.length ; i++){
+
+                    matMar[i]== null ? str3 = "&nbsp;" : str3 = "X";
+                    str2 = JSON.stringify(data[i])
+                    str += "<p>" + data[i].nombre + " "+data[i].apellido+ "</p>"
+                }
+
+                disVer.innerHTML = str;
+            }
+
+            if(cuActivo == "14"){ // ya_
                 let disVer = document.getElementById('cu13_listarVerificadores');
                 let str  = "";
                 let str2 = "";
@@ -487,12 +523,10 @@
                     str2 = JSON.stringify(data[i])
                     str += "<p><button onclick='selVer(this)' "+
                         "id='"+str2+"'"+
-                        ">"+str3+"</button>&nbsp;" + data[i].nombre + "</p>"
+                        ">"+str3+"</button>&nbsp;" + data[i].nombre + " "+data[i].apellido+ "</p>"
                 }
 
                 disVer.innerHTML = str;
-            }else{
-               
             }
         
         }
@@ -522,9 +556,10 @@
         
         // cu14 Nueva Lista
 
-        function cu14_nuevaLista(){
+        function cu14_nuevaLista(){  // hoy_ 
             console.log("cu14 Nueva Lista")
             cuActivo = "14";
+
            // Colectar los usuarios seleccionados            
             let lisVer = []//Objeto Lista - atributo Verificadores
             for(var i=0 ; i<matMar.length ; i++){
@@ -541,13 +576,15 @@
             console.log("lisCon")
             console.log(lisCon)
 
+            // Colecto el nombre de la lista
             let nombreLista = document.getElementById('cu14_input').value;
             console.log("nombreLista");
             console.log(nombreLista);
+
+            // Valido el envío
             let boolLisVer = lisVer.length == 0;
             let boolLisCon = lisCon.length == 0;
             let boolNom = nombreLista == "";
-
             if(boolLisVer || boolLisCon || boolNom){
                 alert("Debe completar datos de la lista.");
             }else{
@@ -568,12 +605,36 @@
                 layer1.carga = layer0
                 layer1.usuario = user
 
-                fetch('http://localhost:3000/api',{
+                // fetch('http://localhost:3000/api',{
+                //     method: 'POST',
+                //     body: JSON.stringify(layer1),
+                //     headers: {'Content-Type' : 'application/json'}
+                // })
+
+                cu14_nuevaLista2(layer1);
+            }
+
+            matMar = [];
+            matVer = [];
+            marCon = [];
+            lisCon = []; 
+            document.getElementById('cu14_input').value = "";
+            document.getElementById('button_cu11').removeAttribute('disabled'); // ya_                     
+            document.getElementById('button_cu13').removeAttribute('disabled'); // ya
+
+            cerrarDivs();
+            //ya_
+        }
+
+        function cu14_nuevaLista2(layer1){  // hoy_ 
+            fetch('http://localhost:3000/api',{
                     method: 'POST',
                     body: JSON.stringify(layer1),
                     headers: {'Content-Type' : 'application/json'}
-                })
-            }
+            })
+            .then(data=>data.json)
+            .then(document.querySelector('dialog').close())
+            .then(cu15_listarListas())
         }
 
         // cu15 Listar Listas
@@ -617,6 +678,7 @@
 
             let str = "";
             for(var i=0 ; i<data.length ; i++){
+
                 let str2 = JSON.stringify(data[i]);
                 console.log("\n"+data[i].nombre)
                 str += "<p><b>"+data[i].nombre+"</b>"+
@@ -639,9 +701,6 @@
 
                 var hoy = new Date();
                 var otro;
-                
-                // console.log("Hoy")
-                // console.log(hoy)
 
                 str += "<ul>"
                 for(var j=0 ; j<data[i].controles.length ; j++){
@@ -710,28 +769,138 @@
 
         }
 
-        function modificarLista(arg1){
+        let transporte; // Gloabal para cu16 Modificar lista
 
+        function modificarLista(arg1){   // hoy_ 
+            console.log("-> modificarLista(arg)")
+            console.log(arg1);
+            cuActivo = "19";
 
-            var lis = JSON.parse(arg1.getAttribute('id'))
-            console.log(lis);
+            var lis = JSON.parse(arg1.getAttribute('id'))  // hoy_  lis es el objeto lista
+            modificarLista_i(lis);
+        }
+
+        function modificarLista_i(lis){  // hoy_ .....
+            transporte = lis;
             let modal = document.getElementById('modal');
 
-            var str = "---- "+lis.nombre+" ----\n"
-            str +="\n";
+            var str_id;
+            var str = "<h2>"+lis.nombre+"</h2>\n"
+
+            let strBot = "";
+            let bandera = false;
+            
+            str +="<b>Verificadores</b>\n";
+ 
             for(var i=0 ; i<matVer.length ; i++){
-                str += "   "+matVer[i].nombre+"\n"
-            }
+                bandera = false;
+
+                for(var j=0 ; j<lis.verificadores.length ; j++){
+                    
+                    if(matVer[i].nombre == lis.verificadores[j].nombre ){
+                        bandera = true;
+                    }
+                }
+
+                bandera?strBot="X":strBot="&nbsp;";
+
+                str_id = JSON.stringify(matVer[i])
+
+                str += "<p><button id='"+str_id+"' onclick='addVerificador(this)'>"+strBot+"</button>&nbsp;"+matVer[i].nombre+" "+matVer[i].apellido+"</p> \n";
+                
+            }   
+
+            str += "<b>Controles: </b>\n";
             str +="\n";
+
             for(var i=0 ; i<matObj.length ; i++){
-                str += matObj[i].parametro+"\n"
+
+                bandera = false;
+                for(var j=0 ; j<lis.controles.length; j++){
+
+                    if(matObj[i].parametro == lis.controles[j].parametro){
+                        bandera = true;
+                    }
+                }
+
+                bandera?strBot="X":strBot="&nbsp;";
+
+                str_id = JSON.stringify(matObj[i]);
+
+                str += "<p><button id='"+str_id+"' onclick='addControl(this)'>"+
+                    strBot+"</button>&nbsp;"+matObj[i].parametro+"</p> \n";
+
             }
 
-            modal.innerText = str;
+            modal.innerHTML = str;
             document.querySelector('dialog').showModal()
         }
+
+        function addControl(arg){
+            var str_mod_con = arg.getAttribute('id')
+            var obj_mod_con = JSON.parse(str_mod_con)
+            console.log('Seleccionaste: '+str_mod_con)
+            console.log("transporte");
+            console.log(transporte);
+            console.log("obj_mod_con");
+            console.log(obj_mod_con);
+            let filte = transporte.controles.filter(x=>x.parametro == obj_mod_con.parametro)
+            console.log(filte.length);
+            if(filte.length == 0){
+                transporte.controles.push(obj_mod_con);
+            }else{
+                transporte.controles = transporte.controles.filter(x=>x.parametro != obj_mod_con.parametro)
+            }
+            console.log("transporte");
+            console.log(transporte);
+            modificarLista_i(transporte);
+        }
+
+        function addVerificador(arg){
+            var obj_mod_ver = JSON.parse(arg.getAttribute('id'));
+            let filte = transporte.verificadores.filter(x=>x.nombre == obj_mod_ver.nombre)
+            console.log(filte.length)
+            if(filte.length == 0){
+                transporte.verificadores.push(obj_mod_ver);
+            }else{
+                transporte.verificadores = transporte.verificadores.filter(x=>x.nombre != obj_mod_ver.nombre)
+            }
+            modificarLista_i(transporte);
+        }
+     
+        function cu16_modificarLista(){ // hoy_ 
+            let layer0 = transporte
+
+            let layer1 = {}
+            layer1.cu = "cu14_nuevaLista"
+            layer1.carga = layer0
+            layer1.usuario = user
+
+
+            cu14_nuevaLista2(layer1);
+        }
+
+        function cenColeccion_x(elemento, coleccion){
+            console.log("elemento")
+            console.log(elemento)
+            console.log("coleccion")
+            console.log(coleccion)
+            let i=0;
+            let vdrx = false;
+            do{
+                console.log("i: "+i)
+                console.log(coleccion[i].parametro);
+                console.log(elemento.parametro);
+                vdrx = (coleccion[i].parametro == elemento.parametro);
+                //vdrx = (elemento.parametro == elemento.parametro);
+                i=i+1;
+                console.log("vdr")
+                console.log(vdrx)
+            }while(!(vdrx || i<coleccion.length))
+            return vdrx;
+        }
     
-        function cu17_listasVerificar(){ // _hoy
+        function cu17_listasVerificar(){  
  
                 let layer0 = {}
 
@@ -750,7 +919,7 @@
  
         }
 
-        function mostrarVerificar(data){ // _hoy 
+        function mostrarVerificar(data){  
             console.log(data);
 
             let str ="";

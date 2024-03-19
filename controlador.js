@@ -49,7 +49,7 @@ function procesar(data){
         console.log("note right 'cu12_actualizarControles'")
 
 
-        //Convierto los controles en Objetos Control
+        //Convierto los controles recibidos en Objetos Control
         let newCon = []
         for(var i=0 ; i< data.carga.length ; i++){
             newCon.push(Clases.Control.fromJSON(data.carga[i]))
@@ -67,28 +67,37 @@ function procesar(data){
 
         Modelo.guardarUsuarios(colUsu);
 
+        // Ahora modificamos los controles de las listas
         console.log("con --> mod 'dameListas()'")
         let colLis = Modelo.dameListas()
         console.log("con <-r- mod '[{Lista}]'")
     
-
         for(var i=0 ; i<colLis.length ; i++){
 
             //console.log(colLis[i].autor.nomUsu)
 
             if(colLis[i].autor.nomUsu == data.usuario.nomUsu){
                 //Estas son MIS LISTAS
+                let nuevaListaControles = [];
                 for(var j=0 ; j<colLis[i].controles.length ; j++){
                     //Estos son los controles de mis listas
                     //console.log(colLis[i].controles[j].parametro)
                     for(var k=0 ; k<data.carga.length ; k++){
+                        //Si coincide el parámetro de control, reemplazo el control en la lista
                         if(colLis[i].controles[j].parametro == data.carga[k].parametro){
-                            //console.log(colLis[i].controles[j].parametro+" - "+data.carga[k].parametro)
+                            console.log(colLis[i].controles[j].parametro+" - "+data.carga[k].parametro)
+                            console.log(colLis[i].controles[j].ultimaVer+" - "+data.carga[k].ultimaVer)
+
+                            data.carga[k].ultimaVer = colLis[i].controles[j].ultimaVer;
                             colLis[i].controles[j] = data.carga[k]
+                            // Agrego el control al nuevo vector para eliminar los controls que no vienen en la carga
+                            nuevaListaControles.push(colLis[i].controles[j])
+                            
                         }
                     }
 
                 }
+                colLis[i].controles = nuevaListaControles;
             }
             
         }
@@ -116,6 +125,7 @@ function procesar(data){
         console.log("note right 'cu14_nuevaLista'")
 
         //Instancio el objeto de la clase Lista a partir de data;
+        //    -Agrego los atributos que le faltan  para poder usar .fromJSON
         data.carga.type = "Lista";
         data.carga.autor.type = "Usuario"
         
@@ -125,8 +135,25 @@ function procesar(data){
         let todasListas = Modelo.dameListas();
         console.log("con <-r- mod '[{Listas}]'")
 
-        todasListas.push(nueLis)
+        // Verifico coincidencias para definir si es una lista nueva o debo modificar una existente.
 
+        let fil_todasListas = todasListas.filter(x=>x.nombre == nueLis.nombre && x.autor.nombre == nueLis.autor.nombre);
+        let otras_todasListas = todasListas.filter(x=>!(x.nombre == nueLis.nombre && x.autor.nombre == nueLis.autor.nombre));
+
+        console.log("fil_todasListas.length")
+        console.log(fil_todasListas.length)
+
+        if(fil_todasListas.length == 1){
+
+            fil_todasListas[0].controles = nueLis.controles
+            fil_todasListas[0].verificadores  = nueLis.verificadores
+            todasListas = []
+            todasListas = fil_todasListas.concat(otras_todasListas)
+        }else{
+            todasListas.push(nueLis)
+
+        }
+        
         console.log("con --> mod 'guardarListas(todasListas)'")
         Modelo.guardarListas(todasListas)
        
