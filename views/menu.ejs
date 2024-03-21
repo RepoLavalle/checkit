@@ -154,7 +154,7 @@
 
         <hr><!-- cu16 -->
 
-        <p><button onclick="activarMostrarListas()">Mis Listas:</button></button></p>
+        <p><button onclick="activarMostrarListas()">Mis Listas:</button></button></p> <!--  hoy_ -->
         <div id="cu15_listarListas"></div>
 
         <script>
@@ -180,7 +180,7 @@
             <div id="modal"></div>
             <button onclick="document.querySelector('dialog').close()">Cerrar</button>
             &nbsp;&nbsp;&nbsp;
-            <button onclick='cu16_modificarLista()'>Actualizar</button>  <!-- hoy_ --> 
+            <button onclick='cu16_modificarLista()'>Actualizar</button>  <!--    --> 
         </dialog>
 
         <hr>
@@ -356,8 +356,7 @@
             
         }
 
-        let matObj = []; // Global   // hoy_  matObj almacena los controles
-
+        let matObj = []; // Global  
         function listarControles(data){
             //console.log(data);
             matObj = data.controles; 
@@ -556,7 +555,7 @@
         
         // cu14 Nueva Lista
 
-        function cu14_nuevaLista(){  // hoy_ 
+        function cu14_nuevaLista(){  
             console.log("cu14 Nueva Lista")
             cuActivo = "14";
 
@@ -626,7 +625,7 @@
             //ya_
         }
 
-        function cu14_nuevaLista2(layer1){  // hoy_ 
+        function cu14_nuevaLista2(layer1){ 
             fetch('http://localhost:3000/api',{
                     method: 'POST',
                     body: JSON.stringify(layer1),
@@ -676,17 +675,42 @@
             cu13_listarVerificadores();
             cu11_listarControles();
 
+            let porcentaje = []
+
+            for(var i=0 ; i<data.length ; i++){
+                var hoy = new Date();
+                var otro;
+                var num = 0;
+                var den = 0;
+
+                for(var j=0 ; j<data[i].controles.length ; j++){
+                    otro = new Date(data[i].controles[j].ultimaVer)
+                    var difDias = parseInt( (hoy.getTime()-otro.getTime() )/(1000*60*60*24))
+                    var regresiva = data[i].controles[j].periodicidad - difDias;
+                    // creo una variable intermedia de cuenta
+                    let bandera = difDias > data[i].controles[j].periodicidad
+                    den +=1;
+                    bandera?num += 1:null;
+                }
+                porcentaje[i]=(100-num/den*100).toFixed(2)
+                
+            }
+
             let str = "";
             for(var i=0 ; i<data.length ; i++){
 
                 let str2 = JSON.stringify(data[i]);
                 console.log("\n"+data[i].nombre)
-                str += "<p><b>"+data[i].nombre+"</b>"+
+                str += "<p><b>"+data[i].nombre+"</b>&nbsp;"+
+                    " <button id='"+str2+"' onclick='verLista(this)'>"+porcentaje[i]+" % </button>"+
                     " <button id='"+str2+"' onclick='modificarLista(this)'>Modificar</button>&nbsp; "+
                     " <button id='"+str2+"' onclick='borrarLista(this)'>Eliminar</button>&nbsp; "+
                     "   </p>";
-
+                
                 console.log("Verificadores:")
+                
+                str += "<div id='div_"+str2+"' hidden>"
+
                 str += "<p><u>Verificadores:</u></p>"
                 str += "<ul>"
                 for(var j=0 ; j<data[i].verificadores.length ; j++){
@@ -694,13 +718,12 @@
                     str += "<li>  "+data[i].verificadores[j].nombre+"</li>"
                 }
                 str += "</ul>"
-
-
-                console.log("Controles:")
                 str += "<p><u>Controles:</u></p>";
 
                 var hoy = new Date();
                 var otro;
+                var num = 0;
+                var den = 0;
 
                 str += "<ul>"
                 for(var j=0 ; j<data[i].controles.length ; j++){
@@ -710,8 +733,13 @@
                     var difDias = parseInt( (hoy.getTime()-otro.getTime() )/(1000*60*60*24))
 
                     var regresiva = data[i].controles[j].periodicidad - difDias;
-                    
-                    difDias>data[i].controles[j].periodicidad?str3='red':str3='blue';
+
+                    // creo una variable intermedia de cuenta
+                    let bandera = difDias > data[i].controles[j].periodicidad
+                    bandera ? str3='red':str3='blue';
+
+                    den +=1;
+                    bandera?num += 1:null;
                     
                     console.log("  "+data[i].controles[j].parametro+"  difDias: "+difDias)
                     if(regresiva>0){
@@ -722,9 +750,23 @@
                     " - Verificación: "+difDias+"</li>"                        
                     }
                 }
+
                 str += "</ul>"
+                str += "</div>"
             }
             document.getElementById('cu15_listarListas').innerHTML = str;
+        }
+
+        function verLista(arg){
+            
+            let eleHtm = document.getElementById('div_'+arg.getAttribute('id')) ;
+
+            if(eleHtm.getAttribute('hidden') !== null){
+                eleHtm.removeAttribute('hidden') ;
+            }else{
+                eleHtm.setAttribute('hidden','true');
+            }
+            
         }
         
         // cu16 
@@ -771,16 +813,16 @@
 
         let transporte; // Gloabal para cu16 Modificar lista
 
-        function modificarLista(arg1){   // hoy_ 
+        function modificarLista(arg1){  
             console.log("-> modificarLista(arg)")
             console.log(arg1);
             cuActivo = "19";
 
-            var lis = JSON.parse(arg1.getAttribute('id'))  // hoy_  lis es el objeto lista
+            var lis = JSON.parse(arg1.getAttribute('id'))  
             modificarLista_i(lis);
         }
 
-        function modificarLista_i(lis){  // hoy_ .....
+        function modificarLista_i(lis){  
             transporte = lis;
             let modal = document.getElementById('modal');
 
@@ -868,7 +910,7 @@
             modificarLista_i(transporte);
         }
      
-        function cu16_modificarLista(){ // hoy_ 
+        function cu16_modificarLista(){ 
             let layer0 = transporte
 
             let layer1 = {}
