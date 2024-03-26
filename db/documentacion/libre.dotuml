@@ -1,20 +1,58 @@
-SequenceDiagram{
-  lifeline web 
-  lifeline ser as "server"
-  lifeline seg as "seguiridad"
-  lifeline con as "controlador"
-  lifeline mod as "modelo"
+StateDiagram{
 
- web --> ser 'post/login'
-ser --> seg 'validarUsuario(req.body)'
-seg --> mod 'nomUsuExiste(data)'
-seg <-r- mod 'true'
-seg --> mod 'obtenerUsuario(data.user)'
-seg <-r- mod '{Usuario}'
-seg --> mod 'obtenerSegUsuario(data.user)'
-seg <-r- mod '{SegUsuario}'
-seg --> seg 'new TokUsu'
-ser <-r- seg 'true'
-web <-r- ser 'menu.html'
+    //state html
+
+    state colapsarNuevoControl
+    state activarListarControles
+    state activarListarVerificadores
+    state activarNuevaLista
+    state activarMostrarListas
+
+    state activarVerificar
+    state cerrarDivs  // pendiente
+    state cu10_nuevoControl [fillcolor='green']
+    state cu11_listarControles [fillcolor='green']
+    state cu12_actualizarControles [fillcolor='green']
+
+    state listarControles
+    state armarDisplay
+    state seleccionar
+    state periodicidad
+    state prorrogable
+
+    state reajustable
+    state eliminar
+    state remMos
+    state cu13_listarVerificadores [fillcolor='green']
+    state listarVerificadores
+
+    state selVer
+    state cu14_nuevaLista [fillcolor='green']
+    state cu15_listarListas [fillcolor='green']
+    state listarListas
+    state modificarLista
+
+    state cu17_listasVerificar [fillcolor='green']
+    state mostrarVerificar
+    state cu18_procesar
+    state volver
+
+    state vistaHtml // creada
+    state html_cu17
+    state html_cu13
+    state html_cu15
+    state html_cu11
+
+    state modal as "modal" 
+    state borrarLista
+    state cu19_borrarLista [fillcolor='green']
+    state cu14_nuevaLista2
+
+    state verLista
+
+    vistaHtml -> activarVerificar
+    activarVerificar -> cu17_listasVerificar
+    cu17_listasVerificar -> cu17_listasVerificar
+
  
 }

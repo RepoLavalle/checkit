@@ -7,236 +7,274 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <pre id='intercambio' hidden><%= contenido %></pre>
-    <h1>Sistema Checklist</h1>
-    
-    
-
-    <pre><%= valUsu.carga.nombre %>&nbsp;<%= valUsu.carga.apellido %>&nbsp;[<%= valUsu.carga.nomUsu %>]</pre>
-    <pre></pre>
-    <pre></pre>
-    <button onclick="volver()">Salir</button>
-    <div id="cu10">
-        <hr>
-
-        <button id="colapsarNuevoControl" onclick="colapsarNuevoControl()">Nuevo Control</button>
-        <div id="nuevoControl">
-            <p>
-            <label for="parametro">Parámetro:&nbsp;</label>
-            <input type="text" name="parametro" id="parametro">
-            </p>
-            <p>
-            <label for="periodicidad">Periodicidad:&nbsp;</label>
-            <input type="number" name="periodicidad" id="periodicidad">
-            </p>
-            <p>
-            <label>Prorrogable:</label>
-            <input type="radio" id="radio11" name="prorrogable" value="si">
-            <label for="radio1">Sí</label>
-            <input type="radio" id="radio12" name="prorrogable" value="no">
-            <label for="radio2">No</label>
-            </p>
-            <p>
-            <label>Reajustable:</label>
-            <input type="radio" id="radio21" name="reajustable" value="si">
-            <label for="radio1">Sí</label>
-            <input type="radio" id="radio22" name="reajustable" value="no">
-            <label for="radio2">No</label>
-            </p>
-            <p><label>A partir de:&nbsp;</label><input type="date"  id="desde" name="desde"></p>
-
-            <button onclick="cu10_nuevoControl()">Agregar</button>
-        </div>
-        <script>
-            const divParCer = []; //Global cerrar todos los divs
-            const miDiv = document.getElementById('nuevoControl');
-
-            divParCer.push(miDiv);
-            miDiv.style.display = 'none';
-
-            function colapsarNuevoControl(){
-                
-                if (miDiv.style.display === 'none') {
-                    cerrarDivs();
-                    miDiv.style.display = 'block'; // Cambia a 'block' para mostrar el contenido
-                } else {
-                    miDiv.style.display = 'none'; // Cambia a 'none' para ocultar el contenido
-                }
-                
-            }
-        </script>
-
-        <hr>
-
-        <button onclick="activarListarControles()" id="button_cu11">Mis controles</button> <!-- ya -->
-        <div id="cu11_listarControles"></div>
-        <script>
-            
-            const divLisCon = document.getElementById('cu11_listarControles');
-            divLisCon.style.display = 'none';
-
-            divParCer.push(divLisCon);
-
-            function activarListarControles(){
-                cuActivo = "11";
-                document.getElementById('button_cu11').removeAttribute('disabled');
-
-                if(divLisCon.style.display === 'none'){
-                    cerrarDivs();
-                    divLisCon.style.display = 'block'; // Cambia a 'block' para mostrar el contenido
-                    cu11_listarControles()
-                } else {
-                    divLisCon.style.display = 'none'; // Cambia a 'none' para ocultar el contenido    
-                }
-            }
-        </script>
-
-        <!-- button onclick='cu12_actualizarControles()'>Actualizar</button -->
-
-        <hr>
-        <button onclick="activarListarVerificadores()" id='button_cu13'>Mis Verificadores</button> <!-- ya_ -->
-        <div id="cu13_listarVerificadores"></div>
-
-        <script>
-            const divLisVer = document.getElementById('cu13_listarVerificadores');
-            divLisVer.style.display = 'none';
-
-            divParCer.push(divLisVer);
-
-            function activarListarVerificadores(){
-                cuActivo = "13";
-                if(divLisVer.style.display === 'none'){
-                    cerrarDivs();
-                    divLisVer.style.display = 'block';
-                    cu13_listarVerificadores();
-                }else{
-                    divLisVer.style.display = 'none'
-                }
-            }
-        </script>
-
-        <hr><!-- cu14 -->
-        <button onclick='activarNuevaLista()'>Nueva Lista</button>
-        <div id="divNuevaLista">
-            <p><label>Nombre de Mi Nueva Lista: &nbsp;</label><input type="text" id="cu14_input"></p>
-            <button onclick="cu14_nuevaLista()">Crear</button>
-        </div>
-        <script>
-            const divNueLis = document.getElementById('divNuevaLista');
-            divNueLis.style.display = 'none';
-            
-            divParCer.push(divNueLis);
-
-            function activarNuevaLista(){
-
-                if(divNueLis.style.display === 'none'){
-                    cuActivo = "14";
-                    cerrarDivs();
-                    divNueLis.style.display = 'block';
-                    cu13_listarVerificadores();
-                    divLisVer.style.display = 'block';
-                    cu11_listarControles();               
-                    divLisCon.style.display = 'block';
-                    document.getElementById('button_cu11').setAttribute('disabled','true'); // ya_
-                    document.getElementById('button_cu13').setAttribute('disabled','true'); // ya_
-                    
-                }else{
-
-                    document.getElementById('button_cu11').removeAttribute('disabled'); // ya_                     
-                    document.getElementById('button_cu13').removeAttribute('disabled'); // ya_                     
-                    divNueLis.style.display = 'none';
-                    divLisVer.style.display = 'none';
-                    divLisCon.style.display = 'none';
-            
-                }
-            }
-        </script>
-
-        <hr><!-- cu16 -->
-
-        <p><button onclick="activarMostrarListas()">Mis Listas:</button></button></p> <!--  hoy_ -->
-        <div id="cu15_listarListas"></div>
-
-        <script>
-            const divMosMis = document.getElementById('cu15_listarListas');
-            divMosMis.style.display = 'none';
-
-            divParCer.push(divMosMis);
-            
-            function activarMostrarListas(){
-                
-                if(divMosMis.style.display === 'none'){
-                    cerrarDivs();
-                    divMosMis.style.display = 'block';
-                    cu15_listarListas()
-                }else{
-                    divMosMis.style.display = 'none';
-                }
-            }
-
-        </script>
-
-        <dialog>
-            <div id="modal"></div>
-            <button onclick="document.querySelector('dialog').close()">Cerrar</button>
-            &nbsp;&nbsp;&nbsp;
-            <button onclick='cu16_modificarLista()'>Actualizar</button>  <!--    --> 
-        </dialog>
-
-        <hr>
-        <button onclick='activarVerificar()'>Listas para Verificar</button> 
-        <div id="cu17_listasVerificar"></div>
-      
+    <div>
+        <pre id='intercambio' hidden><%= contenido %></pre>
+        <header class="contenedor-flex">
+            <pre><%= valUsu.carga.nombre %>&nbsp;<%= valUsu.carga.apellido %>&nbsp;[<%= valUsu.carga.nomUsu %>]</pre>
+            <h1>Sistema Checklist</h1>
+            <button onclick="volver()">Salir</button>
+        </header>
         
-        <hr>
-        <script>
-            const divVerVer = document.getElementById('cu17_listasVerificar');
-            divVerVer.style.display = 'none';
+        <div class="principal">
+            <div id="cu10">
+                <hr>
 
-            divParCer.push(divVerVer);
+                <button id="colapsarNuevoControl" onclick="colapsarNuevoControl()">Nuevo Control</button>
+                <div id="nuevoControl">
+                    <p>
+                    <label for="parametro">Parámetro:&nbsp;</label>
+                    <input type="text" name="parametro" id="parametro">
+                    </p>
+                    <p>
+                    <label for="periodicidad">Periodicidad:&nbsp;</label>
+                    <input type="number" name="periodicidad" id="periodicidad">
+                    </p>
+                    <fieldset>
+                        <legend>Prorrogable:</legend>
+                        <input type="radio" id="radio11" name="prorrogable" value="si" hidden>
+                        <button class="xradio" id="radio11Btn" onclick="proOpt('radio11')">Sí</button>
+                        <input type="radio" id="radio12" name="prorrogable" value="no" hidden>
+                        <button class="xradio" id="radio12Btn" onclick="proOpt('radio12')">No</button>
+                    </fieldset>
 
-            function activarVerificar(){ 
-             
-                if(divVerVer.style.display === 'none'){
+                    <fieldset>
+                        <legend>Reajustable:</legend>
+                        <input type="radio" id="radio21" name="reajustable" value="si"  hidden>
+                        <button class="xradio" id="radio21Btn" onclick="proOpt('radio21')">Sí</button>
+                        <input type="radio" id="radio22" name="reajustable" value="no"  hidden>
+                        <button class="xradio" id="radio22Btn" onclick="proOpt('radio22')">Sí</button>
+                    </fieldset>
 
-                    cu17_listasVerificar();  
-                }else{
+                    <script>
+
+                        document.getElementById('radio11').checked = true;
+                        document.getElementById('radio22').checked = true;
+                        pintarRadios();
+                        
+                        function proOpt(arg){
+ 
+                            if(document.getElementById(arg).checked == false){
+                                document.getElementById(arg).checked = true;
+                            }
+
+                            pintarRadios();
+
+                        }
+
+
+
+                        function pintarRadios(){
+
+                            document.getElementById('radio12').checked ? document.getElementById('radio11Btn').setAttribute('style','background-color: transparent'):document.getElementById('radio11Btn').setAttribute('style','background-color: red');
+                            document.getElementById('radio11').checked ? document.getElementById('radio12Btn').setAttribute('style','background-color: transparent'):document.getElementById('radio12Btn').setAttribute('style','background-color: red');
+
+                            document.getElementById('radio22').checked ? document.getElementById('radio21Btn').setAttribute('style','background-color: transparent'):document.getElementById('radio21Btn').setAttribute('style','background-color: red');
+                            document.getElementById('radio21').checked ? document.getElementById('radio22Btn').setAttribute('style','background-color: transparent'):document.getElementById('radio22Btn').setAttribute('style','background-color: red');
+
+                        }
+
+
+
+                    </script>
+
+                    <p><label>A partir de:&nbsp;</label><input type="date"  id="desde" name="desde"></p>
+
+                    <button onclick="cu10_nuevoControl()">Agregar</button>
+                </div>
+                <script>
+                    const divParCer = []; //Global cerrar todos los divs
+                    const miDiv = document.getElementById('nuevoControl');
+
+                    divParCer.push(miDiv);
+                    miDiv.style.display = 'none';
+
+                    function colapsarNuevoControl(){
+                        
+                        if (miDiv.style.display === 'none') {
+                            cerrarDivs();
+                            miDiv.style.display = 'block'; // Cambia a 'block' para mostrar el contenido
+                        } else {
+                            miDiv.style.display = 'none'; // Cambia a 'none' para ocultar el contenido
+                        }
+                        
+                    }
+                </script>
+
+                <hr>
+
+                <button onclick="activarListarControles()" id="button_cu11">Mis controles</button> <!-- ya -->
+                <div id="cu11_listarControles"></div>
+                <script>
+                    
+                    const divLisCon = document.getElementById('cu11_listarControles');
+                    divLisCon.style.display = 'none';
+
+                    divParCer.push(divLisCon);
+
+                    function activarListarControles(){
+                        cuActivo = "11";
+                        document.getElementById('button_cu11').removeAttribute('disabled');
+
+                        if(divLisCon.style.display === 'none'){
+                            cerrarDivs();
+                            divLisCon.style.display = 'block'; // Cambia a 'block' para mostrar el contenido
+                            cu11_listarControles()
+                        } else {
+                            divLisCon.style.display = 'none'; // Cambia a 'none' para ocultar el contenido    
+                        }
+                    }
+                </script>
+
+                <!-- button onclick='cu12_actualizarControles()'>Actualizar</button -->
+
+                <hr>
+                <button onclick="activarListarVerificadores()" id='button_cu13'>Mis Verificadores</button> <!-- ya_ -->
+                <div id="cu13_listarVerificadores"></div>
+
+                <script>
+                    const divLisVer = document.getElementById('cu13_listarVerificadores');
+                    divLisVer.style.display = 'none';
+
+                    divParCer.push(divLisVer);
+
+                    function activarListarVerificadores(){
+                        cuActivo = "13";
+                        if(divLisVer.style.display === 'none'){
+                            cerrarDivs();
+                            divLisVer.style.display = 'block';
+                            cu13_listarVerificadores();
+                        }else{
+                            divLisVer.style.display = 'none'
+                        }
+                    }
+                </script>
+
+                <hr><!-- cu14 -->
+                <button onclick='activarNuevaLista()'>Nueva Lista</button>
+                <div id="divNuevaLista">
+                    <p><label>Nombre de Mi Nueva Lista: &nbsp;</label><input type="text" id="cu14_input"></p>
+                    <button onclick="cu14_nuevaLista()">Crear</button>
+                </div>
+                <script>
+                    const divNueLis = document.getElementById('divNuevaLista');
+                    divNueLis.style.display = 'none';
+                    
+                    divParCer.push(divNueLis);
+
+                    function activarNuevaLista(){
+
+                        if(divNueLis.style.display === 'none'){
+                            cuActivo = "14";
+                            cerrarDivs();
+                            divNueLis.style.display = 'block';
+                            cu13_listarVerificadores();
+                            divLisVer.style.display = 'block';
+                            cu11_listarControles();               
+                            divLisCon.style.display = 'block';
+                            document.getElementById('button_cu11').setAttribute('disabled','true'); // ya_
+                            document.getElementById('button_cu13').setAttribute('disabled','true'); // ya_
+                            
+                        }else{
+
+                            document.getElementById('button_cu11').removeAttribute('disabled'); // ya_                     
+                            document.getElementById('button_cu13').removeAttribute('disabled'); // ya_                     
+                            divNueLis.style.display = 'none';
+                            divLisVer.style.display = 'none';
+                            divLisCon.style.display = 'none';
+                    
+                        }
+                    }
+                </script>
+
+                <hr><!-- cu16 -->
+
+                <p><button onclick="activarMostrarListas()">Mis Listas:</button></button></p> <!--  hoy_ -->
+                <div id="cu15_listarListas"></div>
+
+                <script>
+                    const divMosMis = document.getElementById('cu15_listarListas');
+                    divMosMis.style.display = 'none';
+
+                    divParCer.push(divMosMis);
+                    
+                    function activarMostrarListas(){
+                        
+                        if(divMosMis.style.display === 'none'){
+                            cerrarDivs();
+                            divMosMis.style.display = 'block';
+                            cu15_listarListas()
+                        }else{
+                            divMosMis.style.display = 'none';
+                        }
+                    }
+
+                </script>
+
+                <dialog>
+                    <div id="modal"></div>
+                    <button onclick="document.querySelector('dialog').close()">Cerrar</button>
+                    &nbsp;&nbsp;&nbsp;
+                    <button onclick='cu16_modificarLista()'>Actualizar</button>  <!--    --> 
+                </dialog>
+
+                <hr>
+                <button onclick='activarVerificar()'>Listas para Verificar</button> 
+                <div id="cu17_listasVerificar"></div>
+            
+                
+                <hr>
+                <script>
+                    const divVerVer = document.getElementById('cu17_listasVerificar');
                     divVerVer.style.display = 'none';
-                }
 
-            }
-        </script>
+                    divParCer.push(divVerVer);
 
-        <hr>
-        <button onclick='reset()' disabled>Reset</button>
+                    function activarVerificar(){ 
+                    
+                        if(divVerVer.style.display === 'none'){
 
-        <script>
-            function reset(){
-                let layer0 = {};
+                            cu17_listasVerificar();  
+                        }else{
+                            divVerVer.style.display = 'none';
+                        }
 
-                let layer1 = {}
-                layer1.cu = "reset"
-                layer1.carga = layer0
-                layer1.usuario = user
+                    }
+                </script>
 
-                fetch('http://localhost:3000/api',{
-                    method: 'POST',
-                    body: JSON.stringify(layer1),
-                    headers: {'Content-Type' : 'application/json'}
-                })
-            }
-        </script>
+                <hr>
+                <button onclick='reset()' disabled>Reset</button>
 
-        <!-- Cierra todos div's que no se ocupan -->
-        <script>
-            function cerrarDivs(){
-                for(var i=0 ; i<divParCer.length ; i++){
-                    divParCer[i].style.display = 'none'
-                }
-            }
-        </script>
-          
+                <script>
+                    function reset(){
+                        let layer0 = {};
+
+                        let layer1 = {}
+                        layer1.cu = "reset"
+                        layer1.carga = layer0
+                        layer1.usuario = user
+
+                        fetch('http://localhost:3000/api',{
+                            method: 'POST',
+                            body: JSON.stringify(layer1),
+                            headers: {'Content-Type' : 'application/json'}
+                        })
+                    }
+                </script>
+
+                <!-- Cierra todos div's que no se ocupan -->
+                <script>
+                    function cerrarDivs(){
+                        for(var i=0 ; i<divParCer.length ; i++){
+                            divParCer[i].style.display = 'none'
+                        }
+                    }
+                </script>
+                
+            </div>
+        </div>
+
     </div>
+
     <script>
 
         var str_data = document.getElementById('intercambio').innerText;
@@ -641,8 +679,7 @@
         let estLisDes = false // Gloabal: El estado de las listas desplegadas
 
         function cu15_listarListas(){
-            // estLisDes = document.getElementById('cu15_listarListas').innerHTML == '';
-            // if(estLisDes){
+
                 let layer0 = {}
 
                 let layer1 = {}
@@ -674,9 +711,9 @@
             cuActivo = "15";
             cu13_listarVerificadores();
             cu11_listarControles();
-
+// calculo parámetros
             let porcentaje = []
-
+            
             for(var i=0 ; i<data.length ; i++){
                 var hoy = new Date();
                 var otro;
@@ -700,9 +737,15 @@
             for(var i=0 ; i<data.length ; i++){
 
                 let str2 = JSON.stringify(data[i]);
-                console.log("\n"+data[i].nombre)
+                let str3;
+                
+                
+                porcentaje[i] == 100?str3="style='background-color: green; color: white;'":null;
+                porcentaje[i] <  100?str3="style='background-color: yellow;'":null;
+                porcentaje[i] <=  50?str3="style='background-color: red;   color: white;'":null;
+
                 str += "<p><b>"+data[i].nombre+"</b>&nbsp;"+
-                    " <button id='"+str2+"' onclick='verLista(this)'>"+porcentaje[i]+" % </button>"+
+                    " <button id='"+str2+"' onclick='verLista(this)' "+str3+">"+porcentaje[i]+" % </button>"+
                     " <button id='"+str2+"' onclick='modificarLista(this)'>Modificar</button>&nbsp; "+
                     " <button id='"+str2+"' onclick='borrarLista(this)'>Eliminar</button>&nbsp; "+
                     "   </p>";
@@ -961,23 +1004,37 @@
  
         }
 
-        function mostrarVerificar(data){  
-            console.log(data);
+        function mostrarVerificar(data){  // cu17_
+            //console.log(data);
+            let conFal = []  // indica la cantidad de controles que faltan de la lista
+            console.log("--------------------")
+            for(var i=0 ; i<data.length ; i++){
+                console.log(data[i].controles.length);
+                conFal.push(data[i].controles.length);
+            }
+            console.log("--------------------")
 
             let str ="";
             let strId = "";
             for(var i=0 ; i<data.length ; i++){
                 const obj  = {}
-                console.log(data[i]);
+                // genero el id para el botòn del div
+                let str_id = JSON.stringify(data[i]);
+
+                // defino el color del botón
+                let strCol;
+                conFal[i] !== 0 ? strCol = "style='background-color: red; color: white;'":strCol = "style='background-color: green; color: white;'";
+
                 //console.log("Nombre de la Lista: "+data[i].nombre)
-                str += "<hr><p>Nombre de la Lista: <b>"+data[i].nombre+ "</b></p>";
+                str += "<b>"+data[i].nombre+ "</b>&nbsp;<button id='"+str_id+"' onclick='desLisVer(this)' "+strCol+">"+conFal[i]+"</button></p>";
                 obj.nombre = data[i].nombre;
+
+                str += "<div id='div_"+str_id+"' hidden>"
+                
 
                 //console.log("Lista solicitada por: "+data[i].autor.nombre);
                 str += "<p><b>Lista solicitada por: </b>"+data[i].autor.nombre + "</p>";
                 obj.autor = data[i].autor.nomUsu
-
-                console.log("Verificadores: ")
                 
                 let str2 = ""
                 for(var j=0 ; j<data[i].verificadores.length ; j++ ){
@@ -990,7 +1047,7 @@
                 str +="<p>Lista de parámetros:&nbsp;</p>"
                 str2 = "";
                 for(var j=0 ; j<data[i].controles.length ; j++){
-                    console.log(data[i].controles[j].parametro)
+                    
                     obj.parametro = data[i].controles[j].parametro;
                     let strId = JSON.stringify(obj);
                     //str2 +="<li><input type='checkbox'>"+data[i].controles[j].parametro+"</li>"
@@ -998,6 +1055,9 @@
                         "' onclick='cu18_procesar(this)' style='background-color: green; color: white;'>&nbsp;</button>&nbsp;"+data[i].controles[j].parametro+"</p>"
 
                 }
+
+                str += "</div>";
+            
             }
             str += "<button onclick='cu18_actualizarDB()'>Verificado</button>"
 
@@ -1005,6 +1065,17 @@
 
             cerrarDivs();
             divVerVer.style.display = 'block';
+        }
+
+        function desLisVer(arg){
+            console.log(arg);
+            console.log(arg.getAttribute('id'));
+            let eleHtm = document.getElementById('div_'+arg.getAttribute('id'));
+            if(eleHtm.getAttribute('hidden') !== null){
+                eleHtm.removeAttribute('hidden');
+            }else{
+                eleHtm.setAttribute('hidden','true');
+            }
         }
     
         let swCheck = [] //Parámetros de las Listas del Autor
@@ -1055,6 +1126,92 @@
 
         
     </script>
+
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+        display: flex;
+        flex-wrap: wrap; /* Permite que los elementos se ajusten automáticamente */
+        justify-content: flex-start; /* Centra los elementos horizontalmente */
+        
+        }
+
+        .contenedor-flex {
+            display: flex;
+            flex-wrap: wrap;
+            /* Otras propiedades flex aquí */
+        }
+
+
+        header {
+            background-color: #AAAA46;
+            
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+
+        }
+
+        h1, pre {
+            padding-top:    3px;
+            padding-bottom: 3px;
+            margin:           0;
+            
+        }
+
+        button {
+            width: 80vw; /* 80% del ancho de la ventana gráfica */
+            background-color: #FF8C00; /* Naranja oscuro */
+            color: white; /* Letras blancas */
+            max-width: 600px; /* Ancho máximo de 600 píxeles */
+            border-radius: 10px; /* Bordes redondeados */
+            font-size: 1.5em;
+        }
+
+        .xradio {
+            width: 10vw; /* 80% del ancho de la ventana gráfica */
+            background-color: #FF8C00; /* Naranja oscuro */
+            color: white; /* Letras blancas */
+            max-width: 60px; /* Ancho máximo de 600 píxeles */
+            border-radius: 10px; /* Bordes redondeados */
+            font-size: 1em;            
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            background-color:#E6DC64;
+        }
+
+        input[type="text"], input[type="number"], input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            /* Otros estilos personalizados según tus preferencias */
+        }
+
+        fieldset {
+            display: flex;
+            justify-content:space-around;
+        }
+        
+        .btnInterior {
+            width: 40vw; /* 80% del ancho de la ventana gráfica */
+            background-color: #FF8C00; /* Naranja oscuro */
+            color: white; /* Letras blancas */
+            max-width: 600px; /* Ancho máximo de 600 píxeles */
+            border-radius: 10px; /* Bordes redondeados */
+            font-size: 1.5em;            
+        }
+
+
+
+    </style>
     
     
 
